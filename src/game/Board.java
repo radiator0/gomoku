@@ -98,6 +98,27 @@ public class Board {
         return null;
     }
 
+    public Spot[] checkCrosswiseInverted(Spot spot, int s){
+        Spot[] tab = new Spot[s];
+        int t=1;
+        int z=1;
+        while(t<s){
+            tab[0] = new Spot(spot.x,spot.y);
+            Spot current = new Spot(spot.x+t, spot.y-t);
+            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
+                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
+                    tab[z] = current;
+                    z++;
+                }
+            }
+            if(z==s){
+                return tab;
+            }
+            t++;
+        }
+        return null;
+    }
+
 
 
     public Spot[] winner(int s){
@@ -106,7 +127,7 @@ public class Board {
             for(int j=0; j<table[i].length; j++){
                 if(table[i][j]!=null) {
                     if (checkVertical(new Spot(i, j), s) != null) {
-                        tab = checkCrosswise(new Spot(i, j), s);
+                        tab = checkVertical(new Spot(i, j), s);
                         return tab;
                     }
                     if (checkHorizontal(new Spot(i, j), s) != null) {
@@ -115,6 +136,10 @@ public class Board {
                     }
                     if (checkCrosswise(new Spot(i, j), s) != null) {
                         tab = checkCrosswise(new Spot(i, j), s);
+                        return tab;
+                    }
+                    if (checkCrosswiseInverted(new Spot(i, j), s) != null) {
+                        tab = checkCrosswiseInverted(new Spot(i, j), s);
                         return tab;
                     }
                 }
