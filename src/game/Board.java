@@ -149,10 +149,21 @@ public class Board {
     }
 
     public int whoWon(Spot[] tab){
+        if(tab != null) {
             int x = tab[0].x;
             int y = tab[0].y;
             return table[x][y].getValue();
+        }
+        return -1;
+    }
 
+    public void showWinner(int i){
+        if(i==0){
+            System.out.println("Zwyciezyl gracz O");
+        }
+        else if(i==1){
+            System.out.println("Zwyciezyl gracz X");
+        }
     }
 
     public void showSpots(Spot[] table){

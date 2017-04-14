@@ -105,10 +105,12 @@ public class Panel extends JPanel implements MouseListener{
                     if(SwingUtilities.isLeftMouseButton(e)){
                         board.setX(new Spot(i,j));
                         board.showSpots( board.winner(5));
+                        board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Lewy");
                     }else{
                         board.setO(new Spot(i,j));
                         board.showSpots( board.winner(5));
+                        board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Prawy");
                     }
 
