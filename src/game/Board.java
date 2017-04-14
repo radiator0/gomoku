@@ -7,7 +7,7 @@ package game;
 public class Board {
     int size;
     Field table[][];
-    Board(int size){
+    public Board(int size){
         this.size = size;
         table = new Field[size][size];
     }
@@ -105,7 +105,7 @@ public class Board {
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
                 if(checkVertical(new Spot(i,j),s)!=null){
-                    tab = checkVertical(new Spot(i,j),s);
+                    tab = checkCrosswise(new Spot(i,j),s);
                     return tab;
                 }
                 if(checkHorizontal(new Spot(i,j),s)!=null){
@@ -113,7 +113,7 @@ public class Board {
                     return tab;
                 }
                 if(checkVertical(new Spot(i,j),s)!=null){
-                    tab = checkCrosswise(new Spot(i,j),s);
+                    tab = checkVertical(new Spot(i,j),s);
                     return tab;
                 }
 
