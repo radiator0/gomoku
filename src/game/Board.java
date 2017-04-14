@@ -24,6 +24,10 @@ public class Board {
         table[spot.x][spot.y] = Field.empty;
     }
 
+    public Field[][] getBoard() { return table; }
+
+    public int getSize() { return size; }
+
     public boolean checkOut(Spot spot){
         boolean temp = false;
         if( (spot.x<0) || (spot.y<0) || (spot.x>=size) || (spot.y>=size) ){
@@ -52,14 +56,67 @@ public class Board {
         return null;
     }
 
+    public Spot[] checkHorizontal(Spot spot, int s){
+        Spot[] tab = new Spot[s];
+        int t=1;
+        int z=1;
+        while(t<s){
+            tab[0] = new Spot(spot.x,spot.y);
+            Spot current = new Spot(spot.x+t, spot.y);
+            if(checkOut(current)==false){
+                if(table[spot.x][spot.y].getValue()==table[spot.x+t][spot.y].getValue()) {
+                    tab[z] = current;
+                    z++;
+                }
+            }
+            if(z==s){
+                return tab;
+            }
+            t++;
+        }
+        return null;
+    }
+
+    public Spot[] checkCrosswise(Spot spot, int s){
+        Spot[] tab = new Spot[s];
+        int t=1;
+        int z=1;
+        while(t<s){
+            tab[0] = new Spot(spot.x,spot.y);
+            Spot current = new Spot(spot.x+t, spot.y+t);
+            if(checkOut(current)==false){
+                if(table[spot.x][spot.y].getValue()==table[spot.x+t][spot.y+t].getValue()) {
+                    tab[z] = current;
+                    z++;
+                }
+            }
+            if(z==s){
+                return tab;
+            }
+            t++;
+        }
+        return null;
+    }
+
+
+
     public Spot[] winner(int s){
         Spot[] tab = new Spot[s];
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
-                tab=checkVertical(new Spot(i,j),s);
-                if(tab!=null){
+                if(checkVertical(new Spot(i,j),s)!=null){
+                    tab = checkVertical(new Spot(i,j),s);
                     return tab;
                 }
+                if(checkHorizontal(new Spot(i,j),s)!=null){
+                    tab = checkHorizontal(new Spot(i,j),s);
+                    return tab;
+                }
+                if(checkVertical(new Spot(i,j),s)!=null){
+                    tab = checkCrosswise(new Spot(i,j),s);
+                    return tab;
+                }
+
 
             }
         }
