@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -102,9 +103,11 @@ public class Panel extends JPanel implements MouseListener{
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){
                         board.setX(new Spot(i,j));
+                        board.winner(5);
                         System.out.println("Lewy");
                     }else{
                         board.setO(new Spot(i,j));
+                        board.winner(5);
                         System.out.println("Prawy");
                     }
 
