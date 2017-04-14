@@ -37,13 +37,13 @@ public class Board {
     }
     public Spot[] checkVertical(Spot spot, int s){
         Spot[] tab = new Spot[s];
+        tab[0] = new Spot(spot.x,spot.y);
         int t=1;
         int z=1;
         while(t<s){
-            tab[0] = new Spot(spot.x,spot.y);
             Spot current = new Spot(spot.x, spot.y+t);
-            if( (checkOut(current)==false) && (current != null) ){
-                if(table[spot.x][spot.y].getValue()==table[spot.x][spot.y+t].getValue()) {
+            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
+                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
                     tab[z] = current;
                     z++;
                 }
@@ -63,8 +63,8 @@ public class Board {
         while(t<s){
             tab[0] = new Spot(spot.x,spot.y);
             Spot current = new Spot(spot.x+t, spot.y);
-            if( (checkOut(current)==false) && (current != null) ){
-                if(table[spot.x][spot.y].getValue()==table[spot.x+t][spot.y].getValue()) {
+            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
+                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
                     tab[z] = current;
                     z++;
                 }
@@ -84,8 +84,8 @@ public class Board {
         while(t<s){
             tab[0] = new Spot(spot.x,spot.y);
             Spot current = new Spot(spot.x+t, spot.y+t);
-            if( (checkOut(current)==false) && (current != null) ){
-                if(table[spot.x][spot.y].getValue()==table[spot.x+t][spot.y+t].getValue()) {
+            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
+                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
                     tab[z] = current;
                     z++;
                 }
@@ -152,17 +152,20 @@ public class Board {
     public void test(){
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
-                setO(new Spot(i,j));
+                setNull(new Spot(i,j));
             }
         }
+        setX(new Spot(0,0));
+        setX(new Spot(1,1));
+        setX(new Spot(2,2));
     }
 
     public static void main(String[] args){
-        Board b = new Board(15);
+        Board b = new Board(3);
         b.test();
         b.show();
-        b.showSpots( b.winner(5));
-        System.out.println(b.whoWon(b.winner(5)));
+        b.showSpots( b.winner(3));
+        //System.out.println(b.whoWon(b.winner(5)));
     }
 
 
