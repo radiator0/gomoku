@@ -26,30 +26,41 @@ public class Board {
 
     public boolean checkOut(Spot spot){
         boolean temp = false;
-        if( (spot.x<0) || (spot.y<0) || (spot.x>size) || (spot.y>size) ){
+        if( (spot.x<0) || (spot.y<0) || (spot.x>=size) || (spot.y>=size) ){
             temp = true;
         }
         return temp;
+    }
+    public Spot[] checkVertical(Spot spot, int s){
+        Spot[] tab = new Spot[s];
+        int t=1;
+        int z=1;
+        while(t<s){
+            tab[0] = new Spot(spot.x,spot.y);
+            Spot current = new Spot(spot.x, spot.y+t);
+            if(checkOut(current)==false){
+                if(table[spot.x][spot.y].getValue()==table[spot.x][spot.y+t].getValue()) {
+                    tab[z] = current;
+                    z++;
+                }
+            }
+            if(z==s){
+                return tab;
+            }
+            t++;
+        }
+        return null;
     }
 
     public Spot[] winner(int s){
         Spot[] tab = new Spot[s];
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
-               int t=1;
-               while(t<=s){
-                   int z=0;
-                   if(checkOut(new Spot(i,j+t))==false){
-                       if(table[i][j].getValue()==table[i][j+t].getValue()) {
-                           tab[z] = new Spot(i, j + t);
-                           z++;
-                       }
-                   }
-                   if(z==s){
-                       return tab;
-                   }
-                   t++;
-               }
+                tab=checkVertical(new Spot(i,j),s);
+                if(tab!=null){
+                    return tab;
+                }
+
             }
         }
         return null;
