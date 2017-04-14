@@ -113,27 +113,28 @@ public class Board {
                         tab = checkHorizontal(new Spot(i, j), s);
                         return tab;
                     }
-                    if (checkVertical(new Spot(i, j), s) != null) {
-                        tab = checkVertical(new Spot(i, j), s);
+                    if (checkCrosswise(new Spot(i, j), s) != null) {
+                        tab = checkCrosswise(new Spot(i, j), s);
                         return tab;
                     }
                 }
-
-
             }
         }
         return null;
     }
 
     public int whoWon(Spot[] tab){
-        int x = tab[0].x;
-        int y = tab[0].y;
-        return table[x][y].getValue();
+            int x = tab[0].x;
+            int y = tab[0].y;
+            return table[x][y].getValue();
+
     }
 
     public void showSpots(Spot[] table){
-        for(int i=0; i<table.length; i++){
-            System.out.println(table[i].x +","+table[i].y);
+        if(table!=null) {
+            for (int i = 0; i < table.length; i++) {
+                System.out.println(table[i].x + "," + table[i].y);
+            }
         }
     }
 
