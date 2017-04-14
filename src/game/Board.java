@@ -1,7 +1,7 @@
 package game;
 
 /**
- * Author: Mateusz Rokosa
+ * Author: Mateusz RokosaW
  * Date: 2017-04-14
  */
 public class Board {
