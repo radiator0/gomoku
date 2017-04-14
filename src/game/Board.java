@@ -150,10 +150,10 @@ public class Board {
     }
 
     public static void main(String[] args){
-        Board b = new Board(3);
+        Board b = new Board(15);
         b.test();
         b.show();
-        b.showSpots( b.winner(3));
+        b.showSpots( b.winner(5));
     }
 
 
