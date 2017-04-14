@@ -99,6 +99,7 @@ public class Panel extends JPanel implements MouseListener{
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
                 if(shapes[i][j].contains(e.getPoint())){
+                    this.repaint();
 
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){

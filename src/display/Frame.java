@@ -18,21 +18,5 @@ public class Frame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
 
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-
-                final Timer timer = new Timer(50, new ActionListener() {
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        panel.repaint();
-                        panel.revalidate();
-
-                    }
-
-                });
-                timer.start();
-            }
-        });
     }
 }
