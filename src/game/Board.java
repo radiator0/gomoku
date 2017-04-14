@@ -42,7 +42,7 @@ public class Board {
         while(t<s){
             tab[0] = new Spot(spot.x,spot.y);
             Spot current = new Spot(spot.x, spot.y+t);
-            if(checkOut(current)==false){
+            if( (checkOut(current)==false) && (current != null) ){
                 if(table[spot.x][spot.y].getValue()==table[spot.x][spot.y+t].getValue()) {
                     tab[z] = current;
                     z++;
@@ -63,7 +63,7 @@ public class Board {
         while(t<s){
             tab[0] = new Spot(spot.x,spot.y);
             Spot current = new Spot(spot.x+t, spot.y);
-            if(checkOut(current)==false){
+            if( (checkOut(current)==false) && (current != null) ){
                 if(table[spot.x][spot.y].getValue()==table[spot.x+t][spot.y].getValue()) {
                     tab[z] = current;
                     z++;
@@ -84,7 +84,7 @@ public class Board {
         while(t<s){
             tab[0] = new Spot(spot.x,spot.y);
             Spot current = new Spot(spot.x+t, spot.y+t);
-            if(checkOut(current)==false){
+            if( (checkOut(current)==false) && (current != null) ){
                 if(table[spot.x][spot.y].getValue()==table[spot.x+t][spot.y+t].getValue()) {
                     tab[z] = current;
                     z++;
