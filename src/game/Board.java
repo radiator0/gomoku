@@ -104,23 +104,31 @@ public class Board {
         Spot[] tab = new Spot[s];
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
-                if(checkVertical(new Spot(i,j),s)!=null){
-                    tab = checkCrosswise(new Spot(i,j),s);
-                    return tab;
-                }
-                if(checkHorizontal(new Spot(i,j),s)!=null){
-                    tab = checkHorizontal(new Spot(i,j),s);
-                    return tab;
-                }
-                if(checkVertical(new Spot(i,j),s)!=null){
-                    tab = checkVertical(new Spot(i,j),s);
-                    return tab;
+                if(table[i][j]!=null) {
+                    if (checkVertical(new Spot(i, j), s) != null) {
+                        tab = checkCrosswise(new Spot(i, j), s);
+                        return tab;
+                    }
+                    if (checkHorizontal(new Spot(i, j), s) != null) {
+                        tab = checkHorizontal(new Spot(i, j), s);
+                        return tab;
+                    }
+                    if (checkVertical(new Spot(i, j), s) != null) {
+                        tab = checkVertical(new Spot(i, j), s);
+                        return tab;
+                    }
                 }
 
 
             }
         }
         return null;
+    }
+
+    public int whoWon(Spot[] tab){
+        int x = tab[0].x;
+        int y = tab[0].y;
+        return table[x][y].getValue();
     }
 
     public void showSpots(Spot[] table){
@@ -144,7 +152,7 @@ public class Board {
     public void test(){
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
-                setX(new Spot(i,j));
+                setO(new Spot(i,j));
             }
         }
     }
@@ -154,6 +162,7 @@ public class Board {
         b.test();
         b.show();
         b.showSpots( b.winner(5));
+        System.out.println(b.whoWon(b.winner(5)));
     }
 
 
