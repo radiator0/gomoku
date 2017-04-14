@@ -1,5 +1,6 @@
 package display;
 
+import game.Board;
 import game.Field;
 import game.Spot;
 import sun.font.Font2D;
@@ -23,6 +24,8 @@ public class Panel extends JPanel implements MouseListener{
     List<Shape> lines;
     Shape[][] shapes;
     Graphics2D g2d;
+    int count = 6;
+    Board board = new Board(count);
     Panel(){
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(1000,500));
@@ -64,8 +67,9 @@ public class Panel extends JPanel implements MouseListener{
 
     @Override
     protected void paintComponent(Graphics g){
+
         init(g);
-        genBoard(6);
+        genBoard(count);
 
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
@@ -79,9 +83,8 @@ public class Panel extends JPanel implements MouseListener{
             g2d.draw(s);
         }
 
-        Field tab[][] = new Field[6][6];
-        tab[0][1] = Field.O;
-        tab[3][4] = Field.X;
+        //
+        Field tab[][] = board.getBoard();
         for(int i=0; i<tab.length; i++){
             for(int j=0; j<tab[i].length; j++){
                 drawField(tab[i][j], i,j);
@@ -95,8 +98,16 @@ public class Panel extends JPanel implements MouseListener{
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
                 if(shapes[i][j].contains(e.getPoint())){
-                    System.out.println(i + "" + j);
-                    // jakas metoda wywolujaca akcje dla x y
+
+                    // jesli lewym klik
+                    if(SwingUtilities.isLeftMouseButton(e)){
+                        board.setX(new Spot(i,j));
+                        System.out.println("Lewy");
+                    }else{
+                        board.setO(new Spot(i,j));
+                        System.out.println("Prawy");
+                    }
+
                 }
             }
         }
