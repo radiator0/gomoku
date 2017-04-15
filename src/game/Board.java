@@ -4,20 +4,25 @@ package game;
  * Author: Mateusz RokosaW
  * Date: 2017-04-14
  */
+
 public class Board {
     int size;
-    Field table[][];
+    public Field table[][];
     public Board(int size){
         this.size = size;
         table = new Field[size][size];
     }
 
     public void setX(Spot spot){
-        table[spot.x][spot.y] = Field.X;
+        if(table[spot.x][spot.y]==null) {
+            table[spot.x][spot.y] = Field.X;
+        }
     }
 
     public void setO(Spot spot){
-        table[spot.x][spot.y] = Field.O;
+        if(table[spot.x][spot.y]==null) {
+            table[spot.x][spot.y] = Field.O;
+        }
     }
 
     public void setNull(Spot spot){
@@ -35,13 +40,29 @@ public class Board {
         }
         return temp;
     }
-    public Spot[] checkVertical(Spot spot, int s){
+
+    public Spot[] checkAll(Spot spot, int s, int d){
         Spot[] tab = new Spot[s];
         tab[0] = new Spot(spot.x,spot.y);
         int t=1;
         int z=1;
         while(t<s){
-            Spot current = new Spot(spot.x, spot.y+t);
+            Spot current=null;
+            switch(d){
+                case 0:{
+                    current = new Spot(spot.x, spot.y+t);
+                }break;
+                case 1:{
+                    current = new Spot(spot.x+t, spot.y);
+                }break;
+                case 2:{
+                    current = new Spot(spot.x+t, spot.y+t);
+                }break;
+                case 3:{
+                    current = new Spot(spot.x+t, spot.y-t);
+                }break;
+            }
+
             if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
                 if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
                     tab[z] = current;
@@ -55,91 +76,26 @@ public class Board {
         }
         return null;
     }
-
-    public Spot[] checkHorizontal(Spot spot, int s){
-        Spot[] tab = new Spot[s];
-        int t=1;
-        int z=1;
-        while(t<s){
-            tab[0] = new Spot(spot.x,spot.y);
-            Spot current = new Spot(spot.x+t, spot.y);
-            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
-                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
-                    tab[z] = current;
-                    z++;
-                }
-            }
-            if(z==s){
-                return tab;
-            }
-            t++;
-        }
-        return null;
-    }
-
-    public Spot[] checkCrosswise(Spot spot, int s){
-        Spot[] tab = new Spot[s];
-        int t=1;
-        int z=1;
-        while(t<s){
-            tab[0] = new Spot(spot.x,spot.y);
-            Spot current = new Spot(spot.x+t, spot.y+t);
-            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
-                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
-                    tab[z] = current;
-                    z++;
-                }
-            }
-            if(z==s){
-                return tab;
-            }
-            t++;
-        }
-        return null;
-    }
-
-    public Spot[] checkCrosswiseInverted(Spot spot, int s){
-        Spot[] tab = new Spot[s];
-        int t=1;
-        int z=1;
-        while(t<s){
-            tab[0] = new Spot(spot.x,spot.y);
-            Spot current = new Spot(spot.x+t, spot.y-t);
-            if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
-                if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
-                    tab[z] = current;
-                    z++;
-                }
-            }
-            if(z==s){
-                return tab;
-            }
-            t++;
-        }
-        return null;
-    }
-
-
 
     public Spot[] winner(int s){
         Spot[] tab = new Spot[s];
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
                 if(table[i][j]!=null) {
-                    if (checkVertical(new Spot(i, j), s) != null) {
-                        tab = checkVertical(new Spot(i, j), s);
+                    if (checkAll(new Spot(i, j), s, 0) != null) {
+                        tab = checkAll(new Spot(i, j), s, 0);
                         return tab;
                     }
-                    if (checkHorizontal(new Spot(i, j), s) != null) {
-                        tab = checkHorizontal(new Spot(i, j), s);
+                    if (checkAll(new Spot(i, j), s, 1) != null) {
+                        tab = checkAll(new Spot(i, j), s, 1);
                         return tab;
                     }
-                    if (checkCrosswise(new Spot(i, j), s) != null) {
-                        tab = checkCrosswise(new Spot(i, j), s);
+                    if (checkAll(new Spot(i, j), s, 2) != null) {
+                        tab = checkAll(new Spot(i, j), s, 2);
                         return tab;
                     }
-                    if (checkCrosswiseInverted(new Spot(i, j), s) != null) {
-                        tab = checkCrosswiseInverted(new Spot(i, j), s);
+                    if (checkAll(new Spot(i, j), s, 3) != null) {
+                        tab = checkAll(new Spot(i, j), s, 3);
                         return tab;
                     }
                 }
@@ -174,7 +130,6 @@ public class Board {
         }
     }
 
-
     public void show(){
         int i=0;
         for( ; i<table.length; ){
@@ -183,6 +138,28 @@ public class Board {
             }
             System.out.println();
             i++;
+        }
+    }
+
+    public void botEasy(int p){
+        boolean temp = false;
+        int i;
+        int j;
+        while(temp == false) {
+            i=(int)(Math.random()*getSize());
+            j=(int)(Math.random()*getSize());
+            System.out.println(i+","+j);
+            if (getBoard()[i][j].getValue() == null) {
+                if (p == 0) {
+                    System.out.println("Ustawian O");
+                    getBoard()[i][j] = Field.O;
+                    temp = true;
+                } else if (p == 1) {
+                    System.out.println("Ustawiam X");
+                    getBoard()[i][j] = Field.X;
+                    temp = true;
+                }
+            }
         }
     }
 
@@ -201,12 +178,10 @@ public class Board {
         Board b = new Board(3);
         b.test();
         b.show();
+        b.botEasy(0);
+        b.botEasy(0);
+        b.show();
         b.showSpots( b.winner(3));
         //System.out.println(b.whoWon(b.winner(5)));
     }
-
-
-
-
-
 }
