@@ -2,6 +2,7 @@ package game.Bot;
 
 import game.Board;
 import game.Field;
+import game.Spot;
 
 /**
  * Created by Mateusz on 2017-04-15.
@@ -35,8 +36,8 @@ public class BotMedium {
                     if(b.getBoard()[i][j].getValue()==f)
                         i1 = (int)(Math.random()*b.getSize());
                         j1 = (int)(Math.random()*b.getSize());
-                        if( (Math.abs(i-i1)<=1) && (Math.abs(j-j1)<=1) ){
-                            if(b.getBoard()[i1][j1] == null){
+                        if( (Math.abs(i-i1)<=1) && (Math.abs(j-j1)<=1)  ){
+                            if( b.getBoard()[i1][j1] == null ){
                                 if (p == 0) {
                                     System.out.println("Ustawian O");
                                     b.getBoard()[i1][j1] = Field.O;
@@ -50,6 +51,11 @@ public class BotMedium {
                         }
                 }
             }
+            /*if(temp == false){
+                BotEasy easy = new BotEasy(b);
+                easy.levelEasy(p,true);
+                temp = true;
+            }*/
         }
     }
 }
