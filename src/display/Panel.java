@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,13 +22,13 @@ import java.util.ArrayList;
  */
 public class Panel extends JPanel implements MouseListener{
     private int fieldSize = 50;
-    List<Shape> lines;
-    Shape[][] shapes;
-    Graphics2D g2d;
-    int count = 6;
-    Board board = new Board(count);
-    BotEasy easy = new BotEasy(board);
-    BotMedium medium = new BotMedium(board);
+    private List<Shape> lines;
+    private Shape[][] shapes;
+    private Graphics2D g2d;
+    private int count = 6;
+    private Board board = new Board(count);
+    private BotEasy easy = new BotEasy(board);
+    private BotMedium medium = new BotMedium(board);
     Panel(){
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(1000,500));
@@ -56,14 +57,21 @@ public class Panel extends JPanel implements MouseListener{
 
     }
 
+    private void drawWinLine(Spot a, Spot b){
+        Point2D A = new Point2D.Double(a.getX()*fieldSize+25, a.getY()*fieldSize+25);
+        Point2D B = new Point2D.Double(b.getX()*fieldSize+25, b.getY()*fieldSize+25);
+        Line2D line = new Line2D.Double(A,B);
+        lines.add(line);
+    }
+
     private void drawField(Field f, int x, int y){
         if(f==null) return;
         g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("TimesRoman", Font.PLAIN, 60));
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 40));
         if(f.equals(Field.O)){
-            g2d.drawString("O", x*fieldSize, (y+1)*fieldSize);
+            g2d.drawString("O", x*fieldSize+fieldSize/4, (y+1)*fieldSize-fieldSize/4);
         }else if(f.equals(Field.X)){
-            g2d.drawString("X", x*fieldSize, (y+1)*fieldSize);
+            g2d.drawString("X", x*fieldSize+fieldSize/4, (y+1)*fieldSize-fieldSize/4);
         }
     }
 
@@ -75,17 +83,20 @@ public class Panel extends JPanel implements MouseListener{
 
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
-                g2d.setColor(Color.BLACK);
+
+                GradientPaint gp = new GradientPaint(25, 25, Color.DARK_GRAY, 50, 50, Color.BLACK, true);
+                g2d.setPaint(gp);
+                //g2d.setColor(Color.BLACK);
                 g2d.fill(shapes[i][j]);
             }
         }
 
+        g2d.setStroke(new BasicStroke(2f));
         for(Shape s : lines) {
-            g2d.setColor(Color.RED);
+            g2d.setColor(Color.WHITE);
             g2d.draw(s);
         }
 
-        //
         Field tab[][] = board.getBoard();
         for(int i=0; i<tab.length; i++){
             for(int j=0; j<tab[i].length; j++){
@@ -108,6 +119,8 @@ public class Panel extends JPanel implements MouseListener{
                         //easy.levelEasy(0, temp);
                         medium.levelMedium(0,temp);
                         board.showSpots( board.winner(5));
+                        if( board.winner(5)!= null)
+                            drawWinLine(board.winner(5)[0], board.winner(5)[4]);
                         board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Lewy");
                     }else{
