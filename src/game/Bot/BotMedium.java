@@ -14,11 +14,7 @@ public class BotMedium {
     }
 
     public void levelMedium(int p, boolean m) {
-        int i=0;
-        int j=0;
-        int i1=0;
-        int j1 = 0;
-        int f=-1;
+        int i=0, j=0, i1=0, j1 = 0, f=-1;
         if (m == true) {
             if(p==0){
                 f=1;
