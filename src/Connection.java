@@ -13,6 +13,7 @@ public class Connection {
         String clientSentence;
         String capitalizedSentence;
         ServerSocket welcomeSocket = null;
+        boolean start = false;
         try {
             welcomeSocket = new ServerSocket(6789);
         } catch (IOException e) {
@@ -26,9 +27,23 @@ public class Connection {
                     new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
             clientSentence = inFromClient.readLine();
-            System.out.println("Received: " + clientSentence);
-            capitalizedSentence = clientSentence.toUpperCase() + '\n';
-            outToClient.writeBytes(capitalizedSentence);
+            if(clientSentence.equals("start") && !start){
+                System.out.println("Połączono");
+                start = true;
+            }else{
+               // System.out.println(clientSentence);
+            }
+
+            if(start){
+                String[] str = clientSentence.split(";");
+                if(str.length==2){
+                    int x = Integer.parseInt(str[0]);
+                    int y = Integer.parseInt(str[1]);
+                    System.out.println(x + " " + y);
+                }
+            }
+          //  capitalizedSentence = clientSentence.toUpperCase() + '\n';
+          //  outToClient.writeBytes(capitalizedSentence);
         }
 
     }
