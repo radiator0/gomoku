@@ -3,6 +3,7 @@ package display;
 import game.Board;
 import game.Field;
 import game.Spot;
+import game.Bot.BotEasy;
 import sun.font.Font2D;
 
 import javax.swing.*;
@@ -27,6 +28,7 @@ public class Panel extends JPanel implements MouseListener{
     Graphics2D g2d;
     int count = 6;
     Board board = new Board(count);
+    BotEasy easy = new BotEasy(board);
     Panel(){
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(1000,500));
@@ -103,14 +105,14 @@ public class Panel extends JPanel implements MouseListener{
 
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){
-                        board.setX(new Spot(i,j));
-                        board.botEasy(0);
+                        boolean temp = board.setX(new Spot(i,j));
+                        easy.levelEasy(0, temp);
                         board.showSpots( board.winner(5));
                         board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Lewy");
                     }else{
-                        board.setO(new Spot(i,j));
-                        board.botEasy(1);
+                        boolean temp = board.setO(new Spot(i,j));
+                        easy.levelEasy(1, temp);
                         board.showSpots( board.winner(5));
                         board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Prawy");

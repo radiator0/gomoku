@@ -13,16 +13,20 @@ public class Board {
         table = new Field[size][size];
     }
 
-    public void setX(Spot spot){
+    public boolean setX(Spot spot){
         if(table[spot.x][spot.y]==null) {
             table[spot.x][spot.y] = Field.X;
+            return true;
         }
+        return false;
     }
 
-    public void setO(Spot spot){
+    public boolean setO(Spot spot){
         if(table[spot.x][spot.y]==null) {
             table[spot.x][spot.y] = Field.O;
+            return true;
         }
+        return false;
     }
 
     public void setNull(Spot spot){
@@ -141,28 +145,6 @@ public class Board {
         }
     }
 
-    public void botEasy(int p){
-        boolean temp = false;
-        int i;
-        int j;
-        while(temp == false) {
-            i=(int)(Math.random()*getSize());
-            j=(int)(Math.random()*getSize());
-            System.out.println(i+","+j);
-            if (getBoard()[i][j].getValue() == null) {
-                if (p == 0) {
-                    System.out.println("Ustawian O");
-                    getBoard()[i][j] = Field.O;
-                    temp = true;
-                } else if (p == 1) {
-                    System.out.println("Ustawiam X");
-                    getBoard()[i][j] = Field.X;
-                    temp = true;
-                }
-            }
-        }
-    }
-
     public void test(){
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
@@ -177,9 +159,6 @@ public class Board {
     public static void main(String[] args){
         Board b = new Board(3);
         b.test();
-        b.show();
-        b.botEasy(0);
-        b.botEasy(0);
         b.show();
         b.showSpots( b.winner(3));
         //System.out.println(b.whoWon(b.winner(5)));
