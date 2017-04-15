@@ -4,16 +4,14 @@ import game.Board;
 import game.Field;
 import game.Spot;
 import game.Bot.BotEasy;
-import sun.font.Font2D;
+import game.Bot.BotMedium;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -29,6 +27,7 @@ public class Panel extends JPanel implements MouseListener{
     int count = 6;
     Board board = new Board(count);
     BotEasy easy = new BotEasy(board);
+    BotMedium medium = new BotMedium(board);
     Panel(){
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(1000,500));
@@ -106,13 +105,15 @@ public class Panel extends JPanel implements MouseListener{
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){
                         boolean temp = board.setX(new Spot(i,j));
-                        easy.levelEasy(0, temp);
+                        //easy.levelEasy(0, temp);
+                        medium.levelMedium(0,temp);
                         board.showSpots( board.winner(5));
                         board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Lewy");
                     }else{
                         boolean temp = board.setO(new Spot(i,j));
-                        easy.levelEasy(1, temp);
+                        //easy.levelEasy(1, temp);
+                        medium.levelMedium(1,temp);
                         board.showSpots( board.winner(5));
                         board.showWinner(board.whoWon(board.winner(5)));
                         System.out.println("Prawy");
