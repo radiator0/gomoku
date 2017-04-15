@@ -31,7 +31,7 @@ public class Panel extends JPanel implements MouseListener{
     private BotMedium medium = new BotMedium(board);
     Panel(){
         lines = new ArrayList<>();
-        setPreferredSize(new Dimension(1000,500));
+        setPreferredSize(new Dimension(count*fieldSize,count*fieldSize));
         addMouseListener(this);
     }
 
@@ -71,7 +71,7 @@ public class Panel extends JPanel implements MouseListener{
         if(f.equals(Field.O)){
             g2d.drawString("O", x*fieldSize+fieldSize/4, (y+1)*fieldSize-fieldSize/4);
         }else if(f.equals(Field.X)){
-            g2d.drawString("X", x*fieldSize+fieldSize/4, (y+1)*fieldSize-fieldSize/4);
+            g2d.drawString("X", x*fieldSize+fieldSize/3, (y+1)*fieldSize-fieldSize/4);
         }
     }
 
@@ -118,18 +118,18 @@ public class Panel extends JPanel implements MouseListener{
                         boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
                         medium.levelMedium(0,temp);
-                        board.showSpots( board.winner(5));
+                      //  board.showSpots( board.winner(5));
                         if( board.winner(5)!= null)
                             drawWinLine(board.winner(5)[0], board.winner(5)[4]);
                         board.showWinner(board.whoWon(board.winner(5)));
-                        System.out.println("Lewy");
+                       // System.out.println("Lewy");
                     }else{
                         boolean temp = board.setO(new Spot(i,j));
                         //easy.levelEasy(1, temp);
                         medium.levelMedium(1,temp);
-                        board.showSpots( board.winner(5));
+                       // board.showSpots( board.winner(5));
                         board.showWinner(board.whoWon(board.winner(5)));
-                        System.out.println("Prawy");
+                       // System.out.println("Prawy");
                     }
 
                 }
