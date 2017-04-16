@@ -1,3 +1,5 @@
+package connection;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.net.Socket;
  * Created by radiator on 2017-04-15.
  */
 public class Connection {
+    /**
     private void server() throws IOException {
         String clientSentence;
         String capitalizedSentence;
@@ -31,7 +34,7 @@ public class Connection {
                 System.out.println("Połączono");
                 start = true;
             }else{
-               // System.out.println(clientSentence);
+                // System.out.println(clientSentence);
             }
 
             if(start){
@@ -42,8 +45,8 @@ public class Connection {
                     System.out.println(x + " " + y);
                 }
             }
-          //  capitalizedSentence = clientSentence.toUpperCase() + '\n';
-          //  outToClient.writeBytes(capitalizedSentence);
+            //  capitalizedSentence = clientSentence.toUpperCase() + '\n';
+            //  outToClient.writeBytes(capitalizedSentence);
         }
 
     }
@@ -67,5 +70,5 @@ public class Connection {
         //c.client();
 
     }
-
+**/
 }

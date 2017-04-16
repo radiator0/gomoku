@@ -35,6 +35,13 @@ public class Panel extends JPanel implements MouseListener{
         addMouseListener(this);
     }
 
+    public void outsideMove(Spot s){
+        if(s!=null){
+            board.setO(s);
+            this.repaint();
+        }
+    }
+
     private void init(Graphics g){
         super.paintComponent(g);
         g2d = (Graphics2D) g;
@@ -117,7 +124,7 @@ public class Panel extends JPanel implements MouseListener{
                     if(SwingUtilities.isLeftMouseButton(e)){
                         boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
-                        medium.levelMedium(0,temp);
+                       // medium.levelMedium(0,temp);
                       //  board.showSpots( board.winner(5));
                         if( board.winner(5)!= null)
                             drawWinLine(board.winner(5)[0], board.winner(5)[4]);
