@@ -3,6 +3,7 @@ package game;
 /**
  * Created by Mateusz on 2017-04-14.
  */
+
 public class Spot {
     int x;
     int y;

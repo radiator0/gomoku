@@ -8,6 +8,7 @@ package game;
 public class Board {
     int size;
     public Field table[][];
+
     public Board(int size){
         this.size = size;
         table = new Field[size][size];
@@ -37,6 +38,9 @@ public class Board {
 
     public int getSize() { return size; }
 
+    /**
+     * Funkcja checkOut sprawdza czy punkt(Spot) nie leży poza tablicą gry
+     */
     public boolean checkOut(Spot spot){
         boolean temp = false;
         if( (spot.x<0) || (spot.y<0) || (spot.x>=size) || (spot.y>=size) ){
@@ -45,6 +49,13 @@ public class Board {
         return temp;
     }
 
+    /**
+     * checkAll
+     * Funkcja sprawdza czy spelnione sa warunki zwyciestwa
+     * @param spot Punkt wokół którego sprawdzane są warunki zwycięstwa
+     * @param s określa w ilu polach obok siebie muszą być takie same znaki aby zgłosić zwycięstwo
+     * @param d określa w jakim kierunku sprawdzane jest zwyciestwo - pionowym, poziomym, ukośny
+     */
     public Spot[] checkAll(Spot spot, int s, int d){
         Spot[] tab = new Spot[s];
         tab[0] = new Spot(spot.x,spot.y);
@@ -81,6 +92,11 @@ public class Board {
         return null;
     }
 
+    /**
+     * winner
+     * Wywoluje funkcje sprawdzajaca zwyciestwo, oraz zwraca tablice zawierajaca punkty, ktore zwyciezyly
+     * @param s ilosc punktow obok siebie potrzebnych aby zwyciezyc
+     */
     public Spot[] winner(int s){
         Spot[] tab = new Spot[s];
         for(int i=0; i<table.length; i++){
