@@ -1,5 +1,6 @@
 package display;
 
+import connection.Online;
 import game.Board;
 import game.Field;
 import game.Spot;
@@ -29,10 +30,17 @@ public class Panel extends JPanel implements MouseListener{
     private Board board = new Board(count);
     private BotEasy easy = new BotEasy(board);
     private BotMedium medium = new BotMedium(board);
+    private Online multi = null;
+
     Panel(){
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(count*fieldSize,count*fieldSize));
         addMouseListener(this);
+    }
+
+    Panel(Online multi){
+        this();
+        this.multi = multi;
     }
 
     public void outsideMove(Spot s){
@@ -115,6 +123,8 @@ public class Panel extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
+
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
                 if(shapes[i][j].contains(e.getPoint())){
@@ -122,9 +132,14 @@ public class Panel extends JPanel implements MouseListener{
 
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){
+                        System.out.println("KLIIIIK");
+                        if(multi != null){
+                            multi.move(i,j);
+                        }
+
                         boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
-                        medium.levelMedium(0,temp);
+                       // medium.levelMedium(0,temp);
                       //  board.showSpots( board.winner(5));
                         if( board.winner(5)!= null)
                             drawWinLine(board.winner(5)[0], board.winner(5)[4]);
