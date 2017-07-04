@@ -1,7 +1,7 @@
 package game;
 
 /**
- * Author: Mateusz RokosaW
+ * Author: Mateusz Rokosa
  * Date: 2017-04-14
  */
 
@@ -53,41 +53,41 @@ public class Board {
      * checkAll
      * Funkcja sprawdza czy spelnione sa warunki zwyciestwa
      * @param spot Punkt wokół którego sprawdzane są warunki zwycięstwa
-     * @param s określa w ilu polach obok siebie muszą być takie same znaki aby zgłosić zwycięstwo
-     * @param d określa w jakim kierunku sprawdzane jest zwyciestwo - pionowym, poziomym, ukośny
+     * @param fieldsNumber określa w ilu polach obok siebie muszą być takie same znaki aby zgłosić zwycięstwo
+     * @param variant określa w jakim kierunku sprawdzane jest zwyciestwo - pionowym, poziomym, ukośny
      */
-    public Spot[] checkAll(Spot spot, int s, int d){
-        Spot[] tab = new Spot[s];
+    public Spot[] checkAll(Spot spot, int fieldsNumber, int variant){
+        Spot[] tab = new Spot[fieldsNumber];
         tab[0] = new Spot(spot.x,spot.y);
-        int t=1;
-        int z=1;
-        while(t<s){
+        int distanceFromSpot=1;
+        int tempTableCount=1;
+        while(distanceFromSpot < fieldsNumber){
             Spot current=null;
-            switch(d){
+            switch(variant){
                 case 0:{
-                    current = new Spot(spot.x, spot.y+t);
+                    current = new Spot(spot.x, spot.y+distanceFromSpot);
                 }break;
                 case 1:{
-                    current = new Spot(spot.x+t, spot.y);
+                    current = new Spot(spot.x+distanceFromSpot, spot.y);
                 }break;
                 case 2:{
-                    current = new Spot(spot.x+t, spot.y+t);
+                    current = new Spot(spot.x+distanceFromSpot, spot.y+distanceFromSpot);
                 }break;
                 case 3:{
-                    current = new Spot(spot.x+t, spot.y-t);
+                    current = new Spot(spot.x+distanceFromSpot, spot.y-distanceFromSpot);
                 }break;
             }
 
             if( (checkOut(current)==false) && (table[current.x][current.y] != null) ){
                 if(table[spot.x][spot.y].getValue()==table[current.x][current.y].getValue()) {
-                    tab[z] = current;
-                    z++;
+                    tab[tempTableCount] = current;
+                    tempTableCount++;
                 }
             }
-            if(z==s){
+            if(tempTableCount == fieldsNumber){
                 return tab;
             }
-            t++;
+            distanceFromSpot++;
         }
         return null;
     }
@@ -95,28 +95,18 @@ public class Board {
     /**
      * winner
      * Wywoluje funkcje sprawdzajaca zwyciestwo, oraz zwraca tablice zawierajaca punkty, ktore zwyciezyly
-     * @param s ilosc punktow obok siebie potrzebnych aby zwyciezyc
+     * @param fieldsNumber ilosc punktow obok siebie potrzebnych aby zwyciezyc
      */
-    public Spot[] winner(int s){
-        Spot[] tab = new Spot[s];
+    public Spot[] winner(int fieldsNumber){
+        Spot[] tab = new Spot[fieldsNumber];
         for(int i=0; i<table.length; i++){
             for(int j=0; j<table[i].length; j++){
                 if(table[i][j]!=null) {
-                    if (checkAll(new Spot(i, j), s, 0) != null) {
-                        tab = checkAll(new Spot(i, j), s, 0);
-                        return tab;
-                    }
-                    if (checkAll(new Spot(i, j), s, 1) != null) {
-                        tab = checkAll(new Spot(i, j), s, 1);
-                        return tab;
-                    }
-                    if (checkAll(new Spot(i, j), s, 2) != null) {
-                        tab = checkAll(new Spot(i, j), s, 2);
-                        return tab;
-                    }
-                    if (checkAll(new Spot(i, j), s, 3) != null) {
-                        tab = checkAll(new Spot(i, j), s, 3);
-                        return tab;
+                    for(int k=0; k<4; k++){
+                        if (checkAll(new Spot(i, j), fieldsNumber, k) != null) {
+                            tab = checkAll(new Spot(i, j), fieldsNumber, k);
+                            return tab;
+                        }
                     }
                 }
             }
@@ -131,52 +121,5 @@ public class Board {
             return table[x][y].getValue();
         }
         return -1;
-    }
-
-    public void showWinner(int i){
-        if(i==0){
-            System.out.println("Zwyciezyl gracz O");
-        }
-        else if(i==1){
-            System.out.println("Zwyciezyl gracz X");
-        }
-    }
-
-    public void showSpots(Spot[] table){
-        if(table!=null) {
-            for (int i = 0; i < table.length; i++) {
-                System.out.println(table[i].x + "," + table[i].y);
-            }
-        }
-    }
-
-    public void show(){
-        int i=0;
-        for( ; i<table.length; ){
-            for(int j=0; j< table[i].length; j++){
-                System.out.printf("%5d", table[i][j].getValue());
-            }
-            System.out.println();
-            i++;
-        }
-    }
-
-    public void test(){
-        for(int i=0; i<table.length; i++){
-            for(int j=0; j<table[i].length; j++){
-                setNull(new Spot(i,j));
-            }
-        }
-        setX(new Spot(0,0));
-        setX(new Spot(1,1));
-        setX(new Spot(2,2));
-    }
-
-    public static void main(String[] args){
-        Board b = new Board(3);
-        b.test();
-        b.show();
-        b.showSpots( b.winner(3));
-        //System.out.println(b.whoWon(b.winner(5)));
     }
 }

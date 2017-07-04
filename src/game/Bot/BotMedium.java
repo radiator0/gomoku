@@ -8,50 +8,47 @@ import game.Spot;
  * Created by Mateusz on 2017-04-15.
  */
 public class BotMedium {
-    Board b;
-    public BotMedium(Board b){
-        this.b = b;
+    Board board;
+    public BotMedium(Board board){
+        this.board = board;
     }
 
-    public void levelMedium(int p, boolean m) {
-        int i=0, j=0, i1=0, j1 = 0, f=-1;
-        if (m == true) {
-            if(p==0){
-                f=1;
+    /**
+     * @param player wpisujemy symbol, którym gra gracz, bot obiera symbol przeciwny. 0 - O, 1- X
+     */
+    public void levelMedium(int player, boolean canMove) {
+        if (canMove) {
+            boolean moveDone = false;
+            Field opponentPlayer = null;
+            if(player == 0){
+                opponentPlayer = Field.O;
+            }else if(player == 1){
+                opponentPlayer = Field.X;
             }
-            else if(p==1) {
-                f = 0;
-            }
-            boolean temp = false;
-
-
-            while (temp == false) {
-                i = (int) (Math.random() * b.getSize());
-                j = (int) (Math.random() * b.getSize());
-                if (b.getBoard()[i][j] != null) {
-                    if(b.getBoard()[i][j].getValue()==f)
-                        i1 = (int)(Math.random()*b.getSize());
-                        j1 = (int)(Math.random()*b.getSize());
-                        if( (Math.abs(i-i1)<=1) && (Math.abs(j-j1)<=1)  ){
-                            if( b.getBoard()[i1][j1] == null ){
-                                if (p == 0) {
-                                    System.out.println("Ustawian O");
-                                    b.getBoard()[i1][j1] = Field.O;
-                                    temp = true;
-                                } else if (p == 1) {
-                                    System.out.println("Ustawiam X");
-                                    b.getBoard()[i1][j1] = Field.X;
-                                    temp = true;
+            while (!moveDone) {
+                    for(int k=0; k<board.getSize(); k++){
+                        for(int l=0; l<board.getSize(); l++){
+                            if(board.getBoard()[k][l] == opponentPlayer){
+                                Spot currentSpot = new Spot(k,l);
+                                int i = (int)(Math.random()*3);
+                                int j = (int)(Math.random()*3);
+                                currentSpot = new Spot(k-(i-1), l-(j-1));
+                                if(!board.checkOut(currentSpot) && board.getBoard()[currentSpot.getX()][currentSpot.getY()]==null && !moveDone){
+                                    if(player == 1){
+                                        board.setO(currentSpot);
+                                        System.out.println("Ustawiam O");
+                                        moveDone = true;
+                                    }else if(player == 0){
+                                        board.setX(currentSpot);
+                                        System.out.println("Ustawiam X");
+                                        moveDone = true;
+                                    }
                                 }
                             }
                         }
-                }
+
+                    }
             }
-            /*if(temp == false){
-                BotEasy easy = new BotEasy(b);
-                easy.levelEasy(p,true);
-                temp = true;
-            }*/
         }
     }
 }

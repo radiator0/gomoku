@@ -7,28 +7,31 @@ import game.Field;
  * Created by Mateusz on 2017-04-15.
  */
 public class BotEasy {
-    Board b;
-    public BotEasy(Board b){
-        this.b = b;
+    Board board;
+    public BotEasy(Board board){
+        this.board = board;
     }
 
-    public void levelEasy(int p, boolean m) {
-        if (m == true) {
-            boolean temp = false;
+    /**
+     * @param player wpisujemy symbol, którym gra gracz, bot obiera symbol przeciwny. 0 - O, 1- X
+     */
+    public void levelEasy(int player, boolean canMove) {
+        if (canMove) {
+            boolean moveDone = false;
             int i;
             int j;
-            while (temp == false) {
-                i = (int) (Math.random() * b.getSize());
-                j = (int) (Math.random() * b.getSize());
-                if (b.getBoard()[i][j] == null) {
-                    if (p == 0) {
-                        System.out.println("Ustawian O");
-                        b.getBoard()[i][j] = Field.O;
-                        temp = true;
-                    } else if (p == 1) {
+            while (!moveDone) {
+                i = (int) (Math.random() * board.getSize());
+                j = (int) (Math.random() * board.getSize());
+                if (board.getBoard()[i][j] == null) {
+                    if (player == 1) {
+                        System.out.println("Ustawiam O");
+                        board.getBoard()[i][j] = Field.O;
+                        moveDone = true;
+                    } else if (player == 0) {
                         System.out.println("Ustawiam X");
-                        b.getBoard()[i][j] = Field.X;
-                        temp = true;
+                        board.getBoard()[i][j] = Field.X;
+                        moveDone = true;
                     }
                 }
             }

@@ -2,6 +2,7 @@ package display;
 
 import connection.Online;
 import game.Board;
+import game.Bot.BotHard;
 import game.Field;
 import game.Spot;
 import game.Bot.BotEasy;
@@ -30,6 +31,7 @@ public class Panel extends JPanel implements MouseListener{
     private Board board = new Board(count);
     private BotEasy easy = new BotEasy(board);
     private BotMedium medium = new BotMedium(board);
+    private BotHard hard = new BotHard(board);
     private Online multi = null;
 
     Panel(){
@@ -139,18 +141,17 @@ public class Panel extends JPanel implements MouseListener{
 
                         boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
-                       // medium.levelMedium(0,temp);
+                        //medium.levelMedium(1,temp);
+                        hard.levelHard(1,temp,5, new Spot(i,j));
                       //  board.showSpots( board.winner(5));
                         if( board.winner(5)!= null)
                             drawWinLine(board.winner(5)[0], board.winner(5)[4]);
-                        board.showWinner(board.whoWon(board.winner(5)));
                        // System.out.println("Lewy");
                     }else{
                         boolean temp = board.setO(new Spot(i,j));
-                        //easy.levelEasy(1, temp);
-                        medium.levelMedium(1,temp);
+                        //easy.levelEasy(0, temp);
+                        //medium.levelMedium(1,temp);
                        // board.showSpots( board.winner(5));
-                        board.showWinner(board.whoWon(board.winner(5)));
                        // System.out.println("Prawy");
                     }
 
