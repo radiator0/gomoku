@@ -132,12 +132,16 @@ public class Panel extends JPanel implements MouseListener{
 
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){
-                        System.out.println("KLIIIIK");
-                        if(multi != null){
-                            multi.move(i,j);
+                       //System.out.println("KLIIIIK");
+                        if(multi != null ){
+                            if(multi.isMyTurn()){
+                                if(board.setX(new Spot(i,j))){
+                                    multi.move(i,j);
+                                }
+                            }
                         }
 
-                        boolean temp = board.setX(new Spot(i,j));
+                       // boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
                        // medium.levelMedium(0,temp);
                       //  board.showSpots( board.winner(5));

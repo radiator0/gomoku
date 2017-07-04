@@ -18,7 +18,7 @@ public class Frame extends JFrame {
 
     public Frame(int x){
         super("Kółko i krzyżyk");
-        Online multi = new Online();
+        Online multi = new Online("7NM06KZ");
         panel = new Panel(multi);
         add(this.panel);
         pack();
