@@ -9,10 +9,11 @@ import display.Frame;
 public class Test {
     public static void main(String[] args) {
         /** To dziala bez sieci **/
-        Frame f = new Frame();
+        //Frame f = new Frame();
 
         /** To dziala tylko dla sieci **/
-        //Frame f = new Frame(300);
+        Frame f = new Frame(300);
+
     }
 
 }

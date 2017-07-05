@@ -21,7 +21,6 @@ public class Online implements  Multiplayer{
     private void createGame(){
         try {
             gameId = sendGet("a=create");
-            System.out.println(gameId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,6 +67,10 @@ public class Online implements  Multiplayer{
             e.printStackTrace();
         }
         return s;
+    }
+
+    public String getGameId(){
+        return gameId;
     }
 
     private String sendGet(String get) throws Exception {

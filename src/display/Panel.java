@@ -27,7 +27,7 @@ public class Panel extends JPanel implements MouseListener{
     private List<Shape> lines;
     private Shape[][] shapes;
     private Graphics2D g2d;
-    private int count = 15;
+    private int count = 12;
     private Board board = new Board(count);
     private BotEasy easy = new BotEasy(board);
     private BotMedium medium = new BotMedium(board);
@@ -48,8 +48,10 @@ public class Panel extends JPanel implements MouseListener{
     public void outsideMove(Spot s){
         if(s!=null){
             board.setO(s);
+            if (board.winner(5) != null) drawWinLine(board.winner(5)[0], board.winner(5)[4]);
             this.repaint();
         }
+
     }
 
     private void init(Graphics g){
@@ -88,6 +90,7 @@ public class Panel extends JPanel implements MouseListener{
         if(f.equals(Field.O)){
             g2d.drawString("O", x*fieldSize+fieldSize/7, (y+1)*fieldSize-fieldSize/6);
         }else if(f.equals(Field.X)){
+            g2d.setColor(new Color(32,187,174));
             g2d.drawString("X", x*fieldSize+fieldSize/4-1, (y+1)*fieldSize-fieldSize/6);
         }
     }
@@ -134,31 +137,40 @@ public class Panel extends JPanel implements MouseListener{
 
                     // jesli lewym klik
                     if(SwingUtilities.isLeftMouseButton(e)){
-                       //System.out.println("KLIIIIK");
-                        if(multi != null ){
-                            if(multi.isMyTurn()){
-                                if(board.setX(new Spot(i,j))){
-                                    multi.move(i,j);
+                        if( board.winner(5)== null && multi != null && multi.isMyTurn()) {
+                            if (board.setX(new Spot(i, j))) {
+                                multi.move(i, j);
+                                if (board.winner(5) != null){
+                                    drawWinLine(board.winner(5)[0], board.winner(5)[4]);
                                 }
                             }
                         }
-
                        // boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
                         //medium.levelMedium(1,temp);
+                      //  hard.levelHard(1,temp,5, new Spot(i,j));
                       //  board.showSpots( board.winner(5));
-                        if( board.winner(5)!= null)
-                            drawWinLine(board.winner(5)[0], board.winner(5)[4]);
+                       // if( board.winner(5)!= null)
+                          //  drawWinLine(board.winner(5)[0], board.winner(5)[4]);
                        // System.out.println("Lewy");
-                    }else{
-                        boolean temp = board.setO(new Spot(i,j));
-                        hard.levelHard(new Spot(i,j),5);
-                        //easy.levelEasy(0, temp);
-                        //medium.levelMedium(1,temp);
+                    }
+
+
+                    /** //JAK SIE ODKOMENTUJE TO BEDZIE DZIALAL PRAWY PRZYCISK
+                    else{
+                        if( board.winner(5)== null) {
+                            boolean temp = board.setO(new Spot(i, j));
+                            // easy.levelEasy(0, temp);
+                            medium.levelMedium(0, temp);
+
+                            if (board.winner(5) != null)
+                                drawWinLine(board.winner(5)[0], board.winner(5)[4]);
+                        }
+
                        // board.showSpots( board.winner(5));
                        // System.out.println("Prawy");
                     }
-
+                    **/
                 }
             }
         }
