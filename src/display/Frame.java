@@ -2,7 +2,7 @@ package display;
 
 import connection.Multiplayer;
 import connection.Online;
-import connection.Server;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,14 +17,14 @@ public class Frame extends JFrame {
     Panel panel = new Panel();
 
     public Frame(int x){
-        super("Kółko i krzyżyk");
-        Online multi = new Online();
+        super("GOMOKU");
+        Online multi = new Online("EHP23VO");
         panel = new Panel(multi);
         add(this.panel);
         pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
-       // Server server = new Server();
+
 
 
         EventQueue.invokeLater(new Runnable() {
@@ -38,19 +38,6 @@ public class Frame extends JFrame {
                         final SwingWorker worker = new SwingWorker() {
                             @Override
                             protected Object doInBackground() throws Exception {
-                                /**
-                                try {
-                                   // System.out.println("asdsz");
-
-                                    // odbiera TCP pakiety na ruchy
-                                   // panel.outsideMove(server.check());
-
-                                } catch (IOException e1) {
-                                    //System.out.println("ERROR");
-                                    e1.printStackTrace();
-                                }
-                                **/
-
 
                                 // pobiera z neta ruchy
                                 if(multi.isMyTurn() && multi.getLastNumber()>0){
