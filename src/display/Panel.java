@@ -146,13 +146,13 @@ public class Panel extends JPanel implements MouseListener{
                        // boolean temp = board.setX(new Spot(i,j));
                         //easy.levelEasy(0, temp);
                         //medium.levelMedium(1,temp);
-                        hard.levelHard(1,temp,5, new Spot(i,j));
                       //  board.showSpots( board.winner(5));
                         if( board.winner(5)!= null)
                             drawWinLine(board.winner(5)[0], board.winner(5)[4]);
                        // System.out.println("Lewy");
                     }else{
                         boolean temp = board.setO(new Spot(i,j));
+                        hard.levelHard(new Spot(i,j),5);
                         //easy.levelEasy(0, temp);
                         //medium.levelMedium(1,temp);
                        // board.showSpots( board.winner(5));

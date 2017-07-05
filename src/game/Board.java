@@ -49,6 +49,17 @@ public class Board {
         return temp;
     }
 
+    public boolean isFull(){
+        for(int i=0; i<size; i++){
+            for(int j=0; j<size; j++){
+                if(table[i][j] == null){
+                     return false;
+                }
+            }
+        }
+        return true;
+    }
+
     /**
      * checkAll
      * Funkcja sprawdza czy spelnione sa warunki zwyciestwa
