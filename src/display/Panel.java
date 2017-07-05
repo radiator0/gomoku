@@ -26,7 +26,7 @@ public class Panel extends JPanel implements MouseListener{
     private List<Shape> lines;
     private Shape[][] shapes;
     private Graphics2D g2d;
-    private int count = 6;
+    private int count = 15;
     private Board board = new Board(count);
     private BotEasy easy = new BotEasy(board);
     private BotMedium medium = new BotMedium(board);
@@ -81,12 +81,12 @@ public class Panel extends JPanel implements MouseListener{
 
     private void drawField(Field f, int x, int y){
         if(f==null) return;
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(new Font("Calibri", Font.PLAIN, 40));
+        g2d.setColor(new Color(200,4,82));//g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 55));
         if(f.equals(Field.O)){
-            g2d.drawString("O", x*fieldSize+fieldSize/4, (y+1)*fieldSize-fieldSize/4);
+            g2d.drawString("O", x*fieldSize+fieldSize/7, (y+1)*fieldSize-fieldSize/6);
         }else if(f.equals(Field.X)){
-            g2d.drawString("X", x*fieldSize+fieldSize/3, (y+1)*fieldSize-fieldSize/4);
+            g2d.drawString("X", x*fieldSize+fieldSize/4-1, (y+1)*fieldSize-fieldSize/6);
         }
     }
 
@@ -99,9 +99,9 @@ public class Panel extends JPanel implements MouseListener{
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
 
-                GradientPaint gp = new GradientPaint(25, 25, Color.DARK_GRAY, 50, 50, Color.BLACK, true);
-                g2d.setPaint(gp);
-                //g2d.setColor(Color.BLACK);
+               // GradientPaint gp = new GradientPaint(25, 25, Color.DARK_GRAY, 50, 50, Color.BLACK, true);
+                //g2d.setPaint(gp);
+                g2d.setColor(new Color(82,81,93));
                 g2d.fill(shapes[i][j]);
             }
         }
