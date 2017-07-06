@@ -24,9 +24,11 @@ public class Frame extends JFrame {
         this.refresh = refresh;
         add(startpanel);
 
+
         pack();
         this.setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         setVisible(true);
     }
 
@@ -85,5 +87,6 @@ public class Frame extends JFrame {
         pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+        setResizable(false);
     }
 }

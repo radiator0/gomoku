@@ -110,7 +110,8 @@ public class StartPanel extends JPanel implements MouseListener {
         BufferedImage image = null;
         try {
             // image = ImageIO.read(getClass().getResource("gomoku_logo.png"));
-            image = ImageIO.read(new File("gomoku_logo.png"));
+            // Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/yourimagename"))
+            image = ImageIO.read(getClass().getResource("/gomoku_logo.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
