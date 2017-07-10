@@ -13,10 +13,13 @@ public class BotMedium {
         this.board = board;
     }
 
-    /**
-     * @param player wpisujemy symbol, którym gra gracz, bot obiera symbol przeciwny. 0 - O, 1- X
-     */
-    public void levelMedium(int player, boolean canMove) {
+    public void levelMedium(Spot enemy, int fieldsNumber, boolean canMove) {
+        int player = -1;
+        if(board.getBoard()[enemy.getX()][enemy.getY()] == Field.X){
+            player = 1;
+        }else if(board.getBoard()[enemy.getX()][enemy.getY()] == Field.O){
+            player = 0;
+        }
         if (canMove) {
             boolean moveDone = false;
             Field opponentPlayer = null;
@@ -26,13 +29,10 @@ public class BotMedium {
                 opponentPlayer = Field.X;
             }
             while (!moveDone) {
-                    for(int k=0; k<board.getSize(); k++){
-                        for(int l=0; l<board.getSize(); l++){
-                            if(board.getBoard()[k][l] == opponentPlayer){
-                                Spot currentSpot = new Spot(k,l);
+                                Spot currentSpot = enemy;
                                 int i = (int)(Math.random()*3);
                                 int j = (int)(Math.random()*3);
-                                currentSpot = new Spot(k-(i-1), l-(j-1));
+                                currentSpot = new Spot(enemy.getX()-(i-1), enemy.getY()-(j-1));
                                 if(!board.checkOut(currentSpot) && board.getBoard()[currentSpot.getX()][currentSpot.getY()]==null && !moveDone){
                                     if(player == 1){
                                         board.setO(currentSpot);
@@ -49,6 +49,6 @@ public class BotMedium {
 
                     }
             }
-        }
-    }
-}
+
+
+

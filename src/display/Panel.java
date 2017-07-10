@@ -40,6 +40,10 @@ public class Panel extends JPanel implements MouseListener{
         addMouseListener(this);
     }
 
+    public int getCount(){
+        return count;
+    }
+
     Panel(Online multi){
         this();
         this.multi = multi;
@@ -152,11 +156,13 @@ public class Panel extends JPanel implements MouseListener{
                        // System.out.println("Lewy");
                     }else{
                         boolean temp = board.setO(new Spot(i,j));
-                        hard.levelHard(new Spot(i,j),5);
-                        //easy.levelEasy(0, temp);
-                        //medium.levelMedium(1,temp);
+                        hard.levelHard(new Spot(i,j),5, true);
+                        //easy.levelEasy(1, temp);
+                        //medium.levelMedium(0,temp);
                        // board.showSpots( board.winner(5));
                        // System.out.println("Prawy");
+                        if( board.winner(5)!= null)
+                            drawWinLine(board.winner(5)[0], board.winner(5)[4]);
                     }
 
                 }

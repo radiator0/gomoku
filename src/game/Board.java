@@ -38,15 +38,27 @@ public class Board {
 
     public int getSize() { return size; }
 
+    public void clear(){
+        for(int i=0; i<size; i++){
+            for(int j=0; j<size; j++){
+                getBoard()[i][j] = Field.empty;
+            }
+        }
+    }
+
     /**
      * Funkcja checkOut sprawdza czy punkt(Spot) nie leży poza tablicą gry
      */
     public boolean checkOut(Spot spot){
         boolean temp = false;
-        if( (spot.x<0) || (spot.y<0) || (spot.x>=size) || (spot.y>=size) ){
+        if( (spot.getX()<0) || (spot.getY()<0) || (spot.getX()>=size) || (spot.getY()>=size) ){
             temp = true;
         }
         return temp;
+    }
+
+    public Field getSign(Spot spot){
+        return getBoard()[spot.getX()][spot.getY()];
     }
 
     public boolean isFull(){

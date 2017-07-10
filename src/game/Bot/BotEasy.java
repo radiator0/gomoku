@@ -2,6 +2,7 @@ package game.Bot;
 
 import game.Board;
 import game.Field;
+import game.Spot;
 
 /**
  * Created by Mateusz on 2017-04-15.
@@ -12,10 +13,13 @@ public class BotEasy {
         this.board = board;
     }
 
-    /**
-     * @param player wpisujemy symbol, którym gra gracz, bot obiera symbol przeciwny. 0 - O, 1- X
-     */
-    public void levelEasy(int player, boolean canMove) {
+    public void levelEasy(Spot enemy,int fieldsNumber, boolean canMove) {
+        int player = -1;
+        if(board.getBoard()[enemy.getX()][enemy.getY()] == Field.X){
+            player = 1;
+        }else if(board.getBoard()[enemy.getX()][enemy.getY()] == Field.O){
+            player = 0;
+        }
         if (canMove) {
             boolean moveDone = false;
             int i;
