@@ -2,6 +2,7 @@ package display;
 
 import connection.Online;
 import game.Board;
+import game.Bot.Bot;
 import game.Bot.BotHard;
 import game.Field;
 import game.Spot;
@@ -29,9 +30,7 @@ public class Panel extends JPanel implements MouseListener{
     private Graphics2D g2d;
     private int count = 15;
     private Board board = new Board(count);
-    private BotEasy easy = new BotEasy(board);
-    private BotMedium medium = new BotMedium(board);
-    private BotHard hard = new BotHard(board);
+    private Bot bot = new BotEasy(board);
     private Online multi = null;
 
     Panel(){
@@ -156,7 +155,7 @@ public class Panel extends JPanel implements MouseListener{
                        // System.out.println("Lewy");
                     }else{
                         boolean temp = board.setO(new Spot(i,j));
-                        hard.levelHard(new Spot(i,j),5, true);
+                        bot.step(new Spot(i,j),5, true);
                         //easy.levelEasy(1, temp);
                         //medium.levelMedium(0,temp);
                        // board.showSpots( board.winner(5));

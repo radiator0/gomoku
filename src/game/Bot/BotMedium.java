@@ -7,13 +7,13 @@ import game.Spot;
 /**
  * Created by Mateusz on 2017-04-15.
  */
-public class BotMedium {
-    Board board;
+public class BotMedium implements Bot{
+    private Board board;
     public BotMedium(Board board){
         this.board = board;
     }
 
-    public void levelMedium(Spot enemy, int fieldsNumber, boolean canMove) {
+    public void step(Spot enemy, int fieldsNumber, boolean canMove) {
         int player = -1;
         if(board.getBoard()[enemy.getX()][enemy.getY()] == Field.X){
             player = 1;

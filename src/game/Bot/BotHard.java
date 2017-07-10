@@ -7,12 +7,12 @@ import game.Spot;
 /**
  * Created by Mateusz on 2017-04-15.
  */
-public class BotHard {
-    Board board;
+public class BotHard implements Bot{
+    private Board board;
 
     public BotHard(Board board) {this.board = board;}
 
-    public boolean doMove(int x, int y, int player) {
+    private boolean doMove(int x, int y, int player) {
         if (player == 1) {
             System.out.println("Ustawiam O");
             return board.setO(new Spot(x, y));
@@ -23,7 +23,7 @@ public class BotHard {
         return false;
     }
 
-    public Spot findC(Spot enemy, int fieldsNumber, Field sign) {
+    private Spot findC(Spot enemy, int fieldsNumber, Field sign) {
         int size = board.getSize() - 1;
         Spot current = null;
         for (int i = 0; i < 8; i++) {
@@ -149,7 +149,7 @@ public class BotHard {
         return null;
     }
 
-    public Spot findB(Spot enemy, int fieldsNumber, Field sign) {
+    private Spot findB(Spot enemy, int fieldsNumber, Field sign) {
         int size = board.getSize() - 1;
         Spot current = null;
         for (int i = 0; i < 8; i++) {
@@ -271,7 +271,7 @@ public class BotHard {
         return null;
     }
 
-    public Spot findA(Spot enemy, int fieldsNumber, Field sign) {
+    private Spot findA(Spot enemy, int fieldsNumber, Field sign) {
         int size = board.getSize() - 1;
         Spot current = null;
         Spot current2 = null;
@@ -402,7 +402,7 @@ public class BotHard {
         return null;
     }
 
-    public void levelHard(Spot enemy, int fieldsNumber, boolean canMove) {
+    public void step(Spot enemy, int fieldsNumber, boolean canMove) {
         Field wanted = null;
         boolean moveDone = false;
         int player = -1;
