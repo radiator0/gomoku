@@ -14,9 +14,11 @@ import java.io.IOException;
  */
 public class StartPanel extends JPanel implements MouseListener {
     private Graphics2D g2d;
+    Frame frame;
 
-    StartPanel(){
-        setPreferredSize(new Dimension(500,400));
+    StartPanel(Frame frame){
+        this.frame = frame;
+        setPreferredSize(new Dimension(500,385));
         addMouseListener(this);
         setBackground(new Color(82,81,93));
     }
@@ -34,6 +36,31 @@ public class StartPanel extends JPanel implements MouseListener {
 
         drawLogo();
         drawMenu();
+
+        drawVersion();
+        drawCopyright();
+
+        /**
+        // testowy cien 2px
+        g2d.setColor(Color.BLACK);
+        g2d.fillRect(42, 195, 420/3-2,49);
+        g2d.setColor(new Color(82,81,93));
+        g2d.fillRect(44, 197, 420/3-6,45);
+
+        // testowy cien 3px
+        g2d.setColor(new Color(44,42,60));
+        g2d.fillRect(42, 195, 420/3-2,49);
+        g2d.setColor(new Color(82,81,93));
+        g2d.fillRect(45, 198, 420/3-8,43);
+
+
+        // testowe zachowanie po najechaniu kursorem
+        // kolor : #6e6d77   (110,109,119)
+
+        g2d.setColor(new Color(110,109,119));
+        g2d.fillRect(42 + 420/3*2,195,420/3-3, 49);
+         **/
+
     }
 
     private void drawMenu(){
@@ -42,6 +69,7 @@ public class StartPanel extends JPanel implements MouseListener {
 
         drawDivider(40,195,3);
         drawDivider(40,295,2);
+
 
 
         g2d.setFont(new Font("Calibri", Font.BOLD, 25));
@@ -60,7 +88,6 @@ public class StartPanel extends JPanel implements MouseListener {
 
         g2d.drawRect(40,160+space, 420,85);
         g2d.drawRect(41,160+space, 418,84);
-
 
 
         g2d.setFont(new Font("Calibri", Font.BOLD, 30));
@@ -82,18 +109,40 @@ public class StartPanel extends JPanel implements MouseListener {
     private void drawLogo(){
         BufferedImage image = null;
         try {
-            image = ImageIO.read(new File("gomoku_logo.png"));
+            // image = ImageIO.read(getClass().getResource("gomoku_logo.png"));
+            // Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/yourimagename"))
+            image = ImageIO.read(getClass().getResource("/gomoku_logo.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         g2d.drawImage(image,0,0,null);
     }
 
+    private void drawVersion(){
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 13));
+        g2d.drawString("Version 0.1 Alpha", 42,370);
+    }
+
+    private void drawCopyright(){
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 13));
+        g2d.drawString("Copyright \u00a9 2017 Krzysztof Pilarczyk & Mateusz Rokosa ", 152, 370);
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         if(SwingUtilities.isLeftMouseButton(e)){
+            //System.out.println(e.getY()); // 298 348
 
+
+            if(e.getY()>298 && e.getY()<348){
+                if(e.getX()>42 && e.getX()<251){
+                    frame.createGame();
+                }else if(e.getX()>251 && e.getX()<460){
+                    frame.joinGame();
+                }
+            }
         }
+
     }
 
     @Override
