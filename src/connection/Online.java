@@ -3,6 +3,9 @@ package connection;
 import game.Settings;
 import game.Spot;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -22,7 +25,12 @@ public class Online implements  Multiplayer{
 
     private void createGame(){
         try {
-            gameId = sendGet("a=create" + and + "nick=" + Settings.nickname);
+            gameId = sendGet("a=create" + and + "nick=" + Settings.NICK);
+
+            // copy gameid to clipboard
+            StringSelection stringSelection = new StringSelection(gameId);
+            Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clpbrd.setContents(stringSelection, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,7 +38,7 @@ public class Online implements  Multiplayer{
 
     private void joinGame(){
         try {
-            gameId = sendGet("a=join" + and + "nick=" + Settings.nickname);
+            sendGet("a=join" + and + "nick=" + Settings.NICK + and + "gameid=" + gameId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,32 +91,61 @@ public class Online implements  Multiplayer{
 
     public String getPlayerOne(){
         if(!isCreator()){
-            String tmp[] = getPlayersNicks().split(";");
-            if(tmp.length>0 && tmp[0].length()>0){
-                return tmp[0];
-            }
+            return getSettings(0);
         }
         return null;
     }
 
     public String getPlayerTwo(){
         if(isCreator()){
-            String tmp[] = getPlayersNicks().split(";");
-            if(tmp.length>1 && tmp[1].length()>0){
-                return tmp[1];
-            }
+            return getSettings(3);
         }
         return null;
     }
 
-    private String getPlayersNicks(){
+    /**
+     * Pobiera string z ustawieniami
+     * Nick1;MaxIloscRund;CzyWystartowal;Nick2;
+     * @param id
+     * @return
+     */
+    private String getSettings(int id){
         String s = null;
         try {
-            s = sendGet("gameid=" + gameId + and + "a=nicks");
+            s = sendGet("gameid=" + gameId + and + "a=settings");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return s;
+
+        String tmp[] = s.split(";");
+        if(id<tmp.length){
+            return tmp[id];
+        }
+        return null;
+    }
+
+    public void startGame(){
+        try {
+            sendGet("gameid=" + gameId + and + "a=start");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setRounds(int rounds){
+        try {
+            sendGet("gameid=" + gameId + and + "a=setrounds" + and + "rounds=" + rounds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getMaxRounds(){
+        return Integer.valueOf(getSettings(1));
+    }
+
+    public boolean hasStarted(){
+        return "1".equals(getSettings(2));
     }
 
     public String getGameId(){

@@ -13,7 +13,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * Created by radiator on 2017-07-11.
@@ -23,34 +22,46 @@ public class LobbyPanel extends JPanel implements MouseListener {
     private Frame frame;
 
     private Graphics2D g2d;
-    private int rounds = 10;
+    private int rounds = Settings.DEFAULT_MAX_ROUND;
     private Shape minusButton;
     private Shape plusButton;
     private Shape mainButton;
 
     private Online multi;
+    private boolean isCreator;
     private boolean isOpponentOnline = false;
 
-    private final String DEFAULT_NICK = "Player2";
 
-    private String playerOne = "Player11";
-    private String playerTwo = DEFAULT_NICK;
+
+    private String playerOne = Settings.DEFAULT_NICK;
+    private String playerTwo = Settings.DEFAULT_NICK;
     private String gameKey = "A4RT54Z";
 
-    LobbyPanel(Frame frame, Online multi){
+    LobbyPanel(Frame frame, boolean isCreator){
         setPreferredSize(new Dimension(490,375));
         addMouseListener(this);
         setBackground(new Color(123,123,132));
 
         this.frame = frame;
-        this.multi = multi;
+        this.isCreator = isCreator;
 
-        gameKey = multi.getGameId();
-        if(multi.isCreator()) {
-            playerOne = Settings.nickname;
+        if(isCreator) {
+            playerOne = Settings.NICK;
+            multi = new Online();
+            gameKey = multi.getGameId();
+            multi.setRounds(rounds);
         }else{
-            playerTwo = Settings.nickname;
+            playerTwo = Settings.NICK;
+            multi = new Online(gameKey = getGameIdFromUser());
         }
+    }
+
+    private String getGameIdFromUser(){
+        String input = "";
+        while(input.length()!=7){
+            input = JOptionPane.showInputDialog(null ,"ENTER GAME ID:");
+        }
+        return input;
     }
 
     private void init(Graphics g){
@@ -65,15 +76,23 @@ public class LobbyPanel extends JPanel implements MouseListener {
         drawCanvas();
         drawTitle();
         drawAvatars();
-        drawStatus();
+        if(isCreator){drawStatus();}
         drawNicknames();
+        if(!isCreator){getMaxRounds();}
         drawRounds();
         drawGameKey();
         drawMainButtion();
+        if(!isCreator && multi.hasStarted()){  initGame(); }
+    }
+
+
+
+    private void getMaxRounds(){
+        rounds = multi.getMaxRounds();
     }
 
     private void drawTitle(){
-        g2d.setColor(new Color(200,4,82));
+        g2d.setColor(new Color(175,4,72));
         g2d.setFont(new Font("Calibri", Font.PLAIN, 60));
         g2d.drawString("LOBBY",172,55 );
     }
@@ -87,7 +106,6 @@ public class LobbyPanel extends JPanel implements MouseListener {
         g2d.fillOval(372,90, 26,26);
 
         g2d.setColor(new Color(49,49,56));
-       // g2d.drawOval(170,90, 26,26);
         g2d.drawOval(372,90, 26,26);
     }
 
@@ -115,7 +133,7 @@ public class LobbyPanel extends JPanel implements MouseListener {
             playerTwo = nick;
             isOpponentOnline = true;
         }else if(multi.isCreator()){
-            playerTwo = DEFAULT_NICK;
+            playerTwo = Settings.DEFAULT_NICK;
             isOpponentOnline = false;
         }
         nick = multi.getPlayerOne();
@@ -128,22 +146,29 @@ public class LobbyPanel extends JPanel implements MouseListener {
     }
 
     private void drawRounds(){
-        g2d.setColor(new Color(45,43,61));
+        if(isCreator) {
+            g2d.setColor(new Color(45, 43, 61));
 
-        minusButton = new Ellipse2D.Double(210,190,24,24);
-        plusButton = new Ellipse2D.Double(270,190,24,24);
-        g2d.fill(minusButton); g2d.fill(plusButton);
-        g2d.draw(minusButton); g2d.draw(plusButton);
+            minusButton = new Ellipse2D.Double(210, 190, 24, 24);
+            plusButton = new Ellipse2D.Double(270, 190, 24, 24);
+            g2d.fill(minusButton);
+            g2d.fill(plusButton);
+            g2d.draw(minusButton);
+            g2d.draw(plusButton);
+
+            g2d.setColor(Color.white);
+
+            g2d.drawString("-", 219, 207);
+            g2d.drawString("+", 278, 208);
+        }
 
         g2d.setColor(Color.white);
+
         g2d.setFont(new Font("Calibri", Font.BOLD, 20));
-        g2d.drawString("Rounds", 220,186);
+        g2d.drawString("Rounds", 220, 186);
 
         g2d.setFont(new Font("Calibri", Font.PLAIN, 20));
-        g2d.drawString(Integer.toString(rounds),240, 208 );
-
-        g2d.drawString("-",219,207);
-        g2d.drawString("+",278,208);
+        g2d.drawString(Integer.toString(rounds), 240, 208);
 
 
 
@@ -171,34 +196,38 @@ public class LobbyPanel extends JPanel implements MouseListener {
         g2d.setStroke(new BasicStroke(3));
 
         mainButton = new Rectangle2D.Double(150,290,210,40);
-        g2d.draw(mainButton);
+        if(isCreator)g2d.draw(mainButton);
 
         g2d.setStroke(new BasicStroke(1));
     }
 
     private void initGame(){
+        frame.panel = new GamePanel(multi);
         Game game = frame.panel.getGame();
         game.setMaxRound(rounds);
         game.setPlayerOne(playerOne);
         game.setPlayerTwo(playerTwo);
 
+        if(isCreator)multi.startGame();
         frame.startOnline();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(plusButton.contains(e.getPoint()) && rounds<25){
-            rounds++;
-            this.repaint();
-        }else if(minusButton.contains(e.getPoint()) && rounds>1){
-            rounds--;
-            this.repaint();
+        if(plusButton!= null && minusButton != null) {
+            if (plusButton.contains(e.getPoint()) && rounds < 25) {
+                rounds++;
+                multi.setRounds(rounds);
+                this.repaint();
+            } else if (minusButton.contains(e.getPoint()) && rounds > 1) {
+                rounds--;
+                multi.setRounds(rounds);
+                this.repaint();
+            }
         }
         if(mainButton.contains(e.getPoint())){
             if(multi.isCreator() && isOpponentOnline){
                 initGame();
-            }else if(!multi.isCreator()){
-                // to tutaj rzecz ktora ma sie odpalic u dolaczajacego
             }
         }
     }

@@ -54,12 +54,19 @@ public class GamePanel extends JPanel implements MouseListener{
         }else if(botLevel.equals("hard")){
             bot = new BotHard(board);
         }
-        game.setPlayerOne(Settings.nickname);
-        game.setPlayerTwo(Settings.botNickname);
+        game.setPlayerOne(Settings.NICK);
+        game.setPlayerTwo(Settings.BOT_NICK);
     }
 
     public Game getGame(){
         return game;
+    }
+
+    public void opponentMove(){
+        if(multi.isMyTurn() && multi.getLastNumber()>0 && multi.getLastNumber() == game.getMovesCount()+1){
+            outsideMove(multi.getLastSpot());
+            game.incrementMovesCount();
+        }
     }
 
     public void outsideMove(Spot s){
@@ -97,12 +104,11 @@ public class GamePanel extends JPanel implements MouseListener{
         Point2D B = new Point2D.Double(b.getX()*fieldSize+25, b.getY()*fieldSize+25);
         Line2D line = new Line2D.Double(A,B);
         lines.add(line);
-        // usuniecie linii wyznaczajacej wygrana
     }
 
     private void drawField(Field f, int x, int y){
         if(f==null) return;
-        g2d.setColor(new Color(200,4,82));//g2d.setColor(Color.WHITE);
+        g2d.setColor(new Color(72,187,32));//g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Calibri", Font.PLAIN, 55));
         if(f.equals(Field.O)){
             g2d.drawString("O", x*fieldSize+fieldSize/7, (y+1)*fieldSize-fieldSize/6);
@@ -113,8 +119,9 @@ public class GamePanel extends JPanel implements MouseListener{
     }
 
     private void drawRightPanel(){
+        drawWhoTurn();
 
-        g2d.setColor(new Color(200,4,82));
+        g2d.setColor(new Color(175,4,72));
         g2d.fillOval(791,74, 91,91);
         g2d.fillOval(791,523, 91,91);
 
@@ -132,6 +139,20 @@ public class GamePanel extends JPanel implements MouseListener{
         g2d.drawString("Round:"+game.getRound(), 780, 693);
         g2d.drawString("Max round:"+game.getMaxRound(),765,655);
 
+    }
+
+    private void drawWhoTurn(){
+        if(multi != null){
+            String s = "";
+            if(multi.isMyTurn()){
+                s = "Your turn";
+            }else{
+                s = "Opponent turn";
+            }
+            g2d.setColor(Color.BLACK);
+            g2d.setFont(new Font("Calibri", Font.PLAIN, 20));
+            g2d.drawString(s,760,20);
+        }
     }
 
     @Override
@@ -204,6 +225,7 @@ public class GamePanel extends JPanel implements MouseListener{
                             if (multi != null) {
                                 if (multi.isMyTurn()) {
                                     if (board.setX(new Spot(i, j))) {
+                                        game.incrementMovesCount();
                                         multi.move(i, j);
                                     }
                                 }

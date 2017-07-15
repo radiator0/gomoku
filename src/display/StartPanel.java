@@ -74,7 +74,9 @@ public class StartPanel extends JPanel implements MouseListener {
 
         g2d.setFont(new Font("Calibri", Font.BOLD, 25));
         g2d.setColor(Color.WHITE);
+        g2d.drawString("EASY", 87,228);
         g2d.drawString("MEDIUM", 202,228);
+        g2d.drawString("HARD", 362,228);
         g2d.drawString("CREATE", 102,328);
         g2d.drawString("JOIN", 332,328);
     }
@@ -91,7 +93,7 @@ public class StartPanel extends JPanel implements MouseListener {
 
 
         g2d.setFont(new Font("Calibri", Font.BOLD, 30));
-        g2d.setColor(new Color(200,4,82));
+        g2d.setColor(new Color(175,4,72));
         g2d.drawString(text, 115,187+space);
 
     }
@@ -120,7 +122,7 @@ public class StartPanel extends JPanel implements MouseListener {
 
     private void drawVersion(){
         g2d.setFont(new Font("Calibri", Font.PLAIN, 13));
-        g2d.drawString("Version 0.1 Alpha", 42,370);
+        g2d.drawString("Version 1.0 Beta", 42,370);
     }
 
     private void drawCopyright(){

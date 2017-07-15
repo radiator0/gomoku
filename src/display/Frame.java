@@ -33,11 +33,8 @@ public class Frame extends JFrame {
     }
 
     public void createGame(){
-        multi = new Online();
-        panel = new GamePanel(multi);
-
         remove(startpanel);
-        lobbypanel  = new LobbyPanel(this,multi);
+        lobbypanel  = new LobbyPanel(this,true);
         add(lobbypanel);
         pack();
 
@@ -60,11 +57,8 @@ public class Frame extends JFrame {
     }
 
     public void joinGame(){
-        multi = new Online();
-      //  panel = new GamePanel(multi);
-
         remove(startpanel);
-        lobbypanel  = new LobbyPanel(this,multi);
+        lobbypanel  = new LobbyPanel(this,false);
         add(lobbypanel);
         pack();
 
@@ -98,9 +92,7 @@ public class Frame extends JFrame {
                             @Override
                             protected Object doInBackground() throws Exception {
                                 // pobiera z neta ruch przeciwnika
-                                if(multi.isMyTurn() && multi.getLastNumber()>0){
-                                    panel.outsideMove(multi.getLastSpot());
-                                }
+                                panel.opponentMove();
                                 return null;
                             }
                         };

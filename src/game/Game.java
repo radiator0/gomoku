@@ -5,14 +5,16 @@ package game;
  * Date: 2017-07-11
  */
 public class Game {
-    private int maxRound=4;
+    private int maxRound=Settings.DEFAULT_MAX_ROUND;
     private int round = 1;
 
     private int playerOneScore = 0;
     private int playerTwoScore = 0;
 
-    private String playerOne = "Player1";
-    private String playerTwo = "Player2";
+    private int movesCount = 0;
+
+    private String playerOne = Settings.DEFAULT_NICK;
+    private String playerTwo = Settings.DEFAULT_NICK;
 
     private Board board;
 
@@ -25,6 +27,12 @@ public class Game {
 
     public Board getBoard(){
         return board;
+    }
+
+    public int getMovesCount(){ return movesCount;}
+
+    public void incrementMovesCount(){
+        movesCount++;
     }
 
     public void setMaxRound(int maxRound){

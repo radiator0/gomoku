@@ -8,8 +8,6 @@ import display.Frame;
  */
 public class Test {
     public static void main(String[] args) {
-        Frame f = new Frame(300);
-
+        new Frame(300);
     }
-
 }
