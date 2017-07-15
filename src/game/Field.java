@@ -10,7 +10,7 @@ public enum Field{
     empty(null);
 
     Integer value;
-    private Field(Integer value){
+    Field(Integer value){
         this.value = value;
     }
 

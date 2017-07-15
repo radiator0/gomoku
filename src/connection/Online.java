@@ -1,5 +1,6 @@
 package connection;
 
+import game.Settings;
 import game.Spot;
 
 import java.io.BufferedReader;
@@ -11,21 +12,32 @@ import java.net.URL;
  * Created by radiator on 2017-07-03.
  */
 public class Online implements  Multiplayer{
+
     boolean isCreator;
     String and = "&";
     String gameId;
 
     public Online(){isCreator = true; createGame();}
-    public Online(String gameId){isCreator = false; this.gameId = gameId;}
+    public Online(String gameId){isCreator = false; this.gameId = gameId; joinGame();}
 
     private void createGame(){
         try {
-            gameId = sendGet("a=create");
+            gameId = sendGet("a=create" + and + "nick=" + Settings.nickname);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void joinGame(){
+        try {
+            gameId = sendGet("a=join" + and + "nick=" + Settings.nickname);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public boolean isCreator(){
+        return isCreator;
     }
 
     public boolean isMyTurn(){
@@ -63,6 +75,36 @@ public class Online implements  Multiplayer{
         String s = null;
         try {
             s = sendGet("gameid=" + gameId + and + "a=list");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public String getPlayerOne(){
+        if(!isCreator()){
+            String tmp[] = getPlayersNicks().split(";");
+            if(tmp.length>0 && tmp[0].length()>0){
+                return tmp[0];
+            }
+        }
+        return null;
+    }
+
+    public String getPlayerTwo(){
+        if(isCreator()){
+            String tmp[] = getPlayersNicks().split(";");
+            if(tmp.length>1 && tmp[1].length()>0){
+                return tmp[1];
+            }
+        }
+        return null;
+    }
+
+    private String getPlayersNicks(){
+        String s = null;
+        try {
+            s = sendGet("gameid=" + gameId + and + "a=nicks");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,19 +151,25 @@ public class Online implements  Multiplayer{
 
     public static void main(String[] args) throws Exception {
         Online sp = new Online();
-
-       // ServerPHP sp = new ServerPHP("X4WUSI8");
-
-
-        // teraz robimy dla przykladowych danych X4WUSI8
-       //sp.gameId = "X4WUSI8";
-
-       // sp.move(1,2);
-       // sp.move(3,5);
+/**
         sp.move(9,3);
 
         System.out.println(sp.getLastNumber());
       //  System.out.println(sp.getLastSpot());
         System.out.println(sp.isMyTurn());
+ **/
+/**
+        System.out.println(sp.getGameId());
+        while(true){
+            System.out.println(sp.getPlayersNicks());
+            System.out.println(sp.getPlayerTwo()  + "      +++");
+            TimeUnit.SECONDS.sleep(1);
+        }
+**/
+        String a = "ABC;CDE";
+        String tmp[] = a.split(";");
+        if(tmp.length>1 && tmp[1].length()>0){
+            System.out.println( tmp[1]);
+        }
     }
 }

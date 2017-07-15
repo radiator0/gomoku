@@ -1,21 +1,22 @@
 package display;
 
-import connection.Multiplayer;
 import connection.Online;
+import game.Bot.Bot;
 
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+
 /**
  * Author: Krzysztof Pilarczyk
  * Date: 2017-04-11
  */
 public class Frame extends JFrame {
-    Panel panel = new Panel();
+    GamePanel panel;
     StartPanel startpanel = new StartPanel(this);
+    LobbyPanel lobbypanel;
     Online multi;
     int refresh;
 
@@ -23,7 +24,6 @@ public class Frame extends JFrame {
         super("GOMOKU");
         this.refresh = refresh;
         add(startpanel);
-
 
         pack();
         this.setLocationRelativeTo(null);
@@ -34,22 +34,54 @@ public class Frame extends JFrame {
 
     public void createGame(){
         multi = new Online();
-        JOptionPane.showMessageDialog (null, "GAME ID: "  +  multi.getGameId(), "Game key", JOptionPane.PLAIN_MESSAGE);
-        startOnline(refresh, multi);
+        panel = new GamePanel(multi);
+
+        remove(startpanel);
+        lobbypanel  = new LobbyPanel(this,multi);
+        add(lobbypanel);
+        pack();
+
+        startTimer(lobbypanel);
+    }
+
+    public void startTimer(JPanel panel){
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                final Timer timer = new Timer(refresh, new ActionListener() {
+                    @Override
+                    public void actionPerformed(final ActionEvent e) {
+                        panel.repaint();
+                    }
+                });
+                timer.start();
+            }
+        });
     }
 
     public void joinGame(){
-        String input = "";
-        while(input.length()!=7){
-            input = JOptionPane.showInputDialog(null ,"ENTER GAME ID:");
-        }
-        multi = new Online(input);
-        startOnline(refresh, multi);
+        multi = new Online();
+      //  panel = new GamePanel(multi);
+
+        remove(startpanel);
+        lobbypanel  = new LobbyPanel(this,multi);
+        add(lobbypanel);
+        pack();
+
+        startTimer(lobbypanel);
     }
 
-    private void startOnline(int refresh, Online multi){
+    public void startBot(String botLevel){
         remove(startpanel);
-        panel = new Panel(multi);
+        panel = new GamePanel(botLevel);
+        add(panel);
+        pack();
+        this.setLocationRelativeTo(null);
+    }
+
+
+    public void startOnline(){
+        remove(lobbypanel);
         add(panel);
         pack();
         this.setLocationRelativeTo(null);
@@ -65,7 +97,7 @@ public class Frame extends JFrame {
                         final SwingWorker worker = new SwingWorker() {
                             @Override
                             protected Object doInBackground() throws Exception {
-                                // pobiera z neta ruchy
+                                // pobiera z neta ruch przeciwnika
                                 if(multi.isMyTurn() && multi.getLastNumber()>0){
                                     panel.outsideMove(multi.getLastSpot());
                                 }
@@ -80,13 +112,14 @@ public class Frame extends JFrame {
         });
     }
 
-
+/**
     public Frame(){
-        super("Kółko i krzyżyk");
+        super("Gomoku");
         add(panel);
         pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
     }
+ **/
 }

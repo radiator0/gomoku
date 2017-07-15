@@ -18,7 +18,7 @@ public class StartPanel extends JPanel implements MouseListener {
 
     StartPanel(Frame frame){
         this.frame = frame;
-        setPreferredSize(new Dimension(500,385));
+        setPreferredSize(new Dimension(490,375));
         addMouseListener(this);
         setBackground(new Color(82,81,93));
     }
@@ -131,14 +131,21 @@ public class StartPanel extends JPanel implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if(SwingUtilities.isLeftMouseButton(e)){
-            //System.out.println(e.getY()); // 298 348
-
+            System.out.println(e.getX()); // 298 348
 
             if(e.getY()>298 && e.getY()<348){
                 if(e.getX()>42 && e.getX()<251){
                     frame.createGame();
                 }else if(e.getX()>251 && e.getX()<460){
                     frame.joinGame();
+                }
+            }else if(e.getY()>196 && e.getY()<247){
+                if(e.getX()>41 && e.getX()<182){
+                    frame.startBot("easy");
+                }else if(e.getX()>182 && e.getX()<321){
+                    frame.startBot("medium");
+                }else if(e.getX()>321 && e.getX()<460){
+                    frame.startBot("hard");
                 }
             }
         }

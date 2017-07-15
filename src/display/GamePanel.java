@@ -1,13 +1,11 @@
 package display;
 
 import connection.Online;
-import game.Board;
+import game.*;
 import game.Bot.Bot;
 import game.Bot.BotHard;
-import game.Field;
-import game.Spot;
-import game.Bot.BotEasy;
 import game.Bot.BotMedium;
+import game.Bot.BotEasy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,34 +22,50 @@ import java.util.ArrayList;
  * Author: Krzysztof Pilarczyk
  * Date: 2017-04-11
  */
-public class Panel extends JPanel implements MouseListener{
+public class GamePanel extends JPanel implements MouseListener{
     private int fieldSize = 50;
     private List<Shape> lines;
     private Shape[][] shapes;
     private Graphics2D g2d;
-    private int count = 15;
-    private Board board = new Board(count);
-    private Bot bot = new BotEasy(board);
+    private int boardSize = 15;
+    private int winSize = 5;
+    private Game game = new Game(boardSize);
+    private Board board = game.getBoard();
+    private Bot bot = null;
     private Online multi = null;
 
-    Panel(){
+    GamePanel(){
         lines = new ArrayList<>();
-        setPreferredSize(new Dimension(count*fieldSize,count*fieldSize));
+        setPreferredSize(new Dimension(boardSize*fieldSize+150,boardSize*fieldSize));
         addMouseListener(this);
     }
 
-    public int getCount(){
-        return count;
-    }
-
-    Panel(Online multi){
+    GamePanel(Online multi){
         this();
         this.multi = multi;
+    }
+
+    GamePanel(String botLevel){
+        this();
+        if(botLevel.equals("easy")){
+            bot = new BotEasy(board);
+        }else if(botLevel.equals("medium")){
+            bot = new BotMedium(board);
+        }else if(botLevel.equals("hard")){
+            bot = new BotHard(board);
+        }
+        game.setPlayerOne(Settings.nickname);
+        game.setPlayerTwo(Settings.botNickname);
+    }
+
+    public Game getGame(){
+        return game;
     }
 
     public void outsideMove(Spot s){
         if(s!=null){
             board.setO(s);
+            checkIsWin();
             this.repaint();
         }
     }
@@ -82,6 +97,7 @@ public class Panel extends JPanel implements MouseListener{
         Point2D B = new Point2D.Double(b.getX()*fieldSize+25, b.getY()*fieldSize+25);
         Line2D line = new Line2D.Double(A,B);
         lines.add(line);
+        // usuniecie linii wyznaczajacej wygrana
     }
 
     private void drawField(Field f, int x, int y){
@@ -91,21 +107,41 @@ public class Panel extends JPanel implements MouseListener{
         if(f.equals(Field.O)){
             g2d.drawString("O", x*fieldSize+fieldSize/7, (y+1)*fieldSize-fieldSize/6);
         }else if(f.equals(Field.X)){
+            g2d.setColor(new Color(32,187,174));
             g2d.drawString("X", x*fieldSize+fieldSize/4-1, (y+1)*fieldSize-fieldSize/6);
         }
+    }
+
+    private void drawRightPanel(){
+
+        g2d.setColor(new Color(200,4,82));
+        g2d.fillOval(791,74, 91,91);
+        g2d.fillOval(791,523, 91,91);
+
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 24));
+        g2d.drawString(game.getPlayerOne(),802,188);
+        g2d.drawString(game.getPlayerTwo(),802,514);
+
+        g2d.setColor(Color.black);
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 100));
+        g2d.drawString(Integer.toString(game.getPlayerOneScore()),810,290);
+        g2d.drawString(":",820,370);
+        g2d.drawString(Integer.toString(game.getPlayerTwoScore()),810,460);
+
+        g2d.setFont(new Font("Calibri", Font.PLAIN, 24));
+        g2d.drawString("Round:"+game.getRound(), 780, 693);
+        g2d.drawString("Max round:"+game.getMaxRound(),765,655);
+
     }
 
     @Override
     protected void paintComponent(Graphics g){
 
         init(g);
-        genBoard(count);
+        genBoard(boardSize);
 
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
-
-               // GradientPaint gp = new GradientPaint(25, 25, Color.DARK_GRAY, 50, 50, Color.BLACK, true);
-                //g2d.setPaint(gp);
                 g2d.setColor(new Color(82,81,93));
                 g2d.fill(shapes[i][j]);
             }
@@ -123,6 +159,34 @@ public class Panel extends JPanel implements MouseListener{
                 drawField(tab[i][j], i,j);
             }
         }
+
+        drawRightPanel();
+    }
+
+
+    private void checkIsWin(){
+        if(!game.isEnd()) {
+            if (board.winner(winSize) != null) {
+                drawWinLine(board.winner(winSize)[0], board.winner(winSize)[4]);
+                if (Field.X.getValue() == board.whoWon(board.winner(winSize))) {
+                    game.incrementOneScore();
+                } else {
+                    game.incrementTwoScore();
+                }
+                if (!game.isLastRound()) {
+                    board.clear();
+                    game.nextRound();
+                    lines.remove(lines.size() - 1);
+                } else {
+                    game.setEnd();
+                }
+            } else if (board.isFull()) {
+                if (!game.isLastRound()) {
+                    game.nextRound();
+                    board.clear();
+                }
+            }
+        }
     }
 
 
@@ -135,35 +199,22 @@ public class Panel extends JPanel implements MouseListener{
                 if(shapes[i][j].contains(e.getPoint())){
                     this.repaint();
 
-                    // jesli lewym klik
-                    if(SwingUtilities.isLeftMouseButton(e)){
-                       //System.out.println("KLIIIIK");
-                        if(multi != null ){
-                            if(multi.isMyTurn()){
-                                if(board.setX(new Spot(i,j))){
-                                    multi.move(i,j);
+                    if(SwingUtilities.isLeftMouseButton(e)) {
+                        if(board.winner(winSize)== null ) {
+                            if (multi != null) {
+                                if (multi.isMyTurn()) {
+                                    if (board.setX(new Spot(i, j))) {
+                                        multi.move(i, j);
+                                    }
+                                }
+                            } else {
+                                if(board.setX(new Spot(i, j))){
+                                    bot.step(new Spot(i, j), winSize, true);
                                 }
                             }
                         }
-
-                       // boolean temp = board.setX(new Spot(i,j));
-                        //easy.levelEasy(0, temp);
-                        //medium.levelMedium(1,temp);
-                      //  board.showSpots( board.winner(5));
-                        if( board.winner(5)!= null)
-                            drawWinLine(board.winner(5)[0], board.winner(5)[4]);
-                       // System.out.println("Lewy");
-                    }else{
-                        boolean temp = board.setO(new Spot(i,j));
-                        bot.step(new Spot(i,j),5, true);
-                        //easy.levelEasy(1, temp);
-                        //medium.levelMedium(0,temp);
-                       // board.showSpots( board.winner(5));
-                       // System.out.println("Prawy");
-                        if( board.winner(5)!= null)
-                            drawWinLine(board.winner(5)[0], board.winner(5)[4]);
+                        checkIsWin();
                     }
-
                 }
             }
         }
