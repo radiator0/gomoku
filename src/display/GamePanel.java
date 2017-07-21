@@ -1,5 +1,6 @@
 package display;
 
+
 import connection.Online;
 import game.*;
 import game.Bot.Bot;
@@ -14,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Date: 2017-04-11
  */
 public class GamePanel extends JPanel implements MouseListener{
-    private int fieldSize = 50;
+    private int fieldSize = 45;
     private List<Shape> lines;
     private Shape[][] shapes;
     private Graphics2D g2d;
@@ -37,7 +37,9 @@ public class GamePanel extends JPanel implements MouseListener{
     GamePanel(){
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(boardSize*fieldSize+150,boardSize*fieldSize));
+        System.out.println(boardSize*fieldSize+150);
         addMouseListener(this);
+        setBackground(Color.black);
     }
 
     GamePanel(Online multi){
@@ -111,33 +113,38 @@ public class GamePanel extends JPanel implements MouseListener{
         g2d.setColor(new Color(72,187,32));//g2d.setColor(Color.WHITE);
         g2d.setFont(new Font("Calibri", Font.PLAIN, 55));
         if(f.equals(Field.O)){
-            g2d.drawString("O", x*fieldSize+fieldSize/7, (y+1)*fieldSize-fieldSize/6);
+            g2d.drawString("O", x*fieldSize+fieldSize/7 - 1, (y+1)*fieldSize-fieldSize/6 + 2);
         }else if(f.equals(Field.X)){
             g2d.setColor(new Color(32,187,174));
-            g2d.drawString("X", x*fieldSize+fieldSize/4-1, (y+1)*fieldSize-fieldSize/6);
+            g2d.drawString("X", x*fieldSize+fieldSize/4 - 2, (y+1)*fieldSize-fieldSize/6 + 2);
         }
     }
 
     private void drawRightPanel(){
         drawWhoTurn();
 
-        g2d.setColor(new Color(175,4,72));
-        g2d.fillOval(791,74, 91,91);
-        g2d.fillOval(791,523, 91,91);
+        g2d.setColor(new Color(32,187,174));
+        g2d.fillOval(701,54, 91,91);
 
+        g2d.setColor(new Color(72,187,32));
+        g2d.fillOval(701,503, 91,91);
+
+
+
+        g2d.setColor(Color.white);
         g2d.setFont(new Font("Calibri", Font.PLAIN, 24));
-        g2d.drawString(game.getPlayerOne(),802,188);
-        g2d.drawString(game.getPlayerTwo(),802,514);
+        g2d.drawString(game.getPlayerOne(),702,168);
+        g2d.drawString(game.getPlayerTwo(),702,494);
 
-        g2d.setColor(Color.black);
+        g2d.setColor(Color.white);
         g2d.setFont(new Font("Calibri", Font.PLAIN, 100));
-        g2d.drawString(Integer.toString(game.getPlayerOneScore()),810,290);
-        g2d.drawString(":",820,370);
-        g2d.drawString(Integer.toString(game.getPlayerTwoScore()),810,460);
+        g2d.drawString(Integer.toString(game.getPlayerOneScore()),720,270);
+        g2d.drawString(":",730,350);
+        g2d.drawString(Integer.toString(game.getPlayerTwoScore()),720,440);
 
         g2d.setFont(new Font("Calibri", Font.PLAIN, 24));
-        g2d.drawString("Round:"+game.getRound(), 780, 693);
-        g2d.drawString("Max round:"+game.getMaxRound(),765,655);
+        g2d.drawString("Round:"+game.getRound(), 710, 625);
+        g2d.drawString("Max round:"+game.getMaxRound(),683,655);
 
     }
 
@@ -145,13 +152,13 @@ public class GamePanel extends JPanel implements MouseListener{
         if(multi != null){
             String s = "";
             if(multi.isMyTurn()){
-                s = "Your turn";
+                s = "     Your turn";
             }else{
                 s = "Opponent turn";
             }
-            g2d.setColor(Color.BLACK);
+            g2d.setColor(Color.white);
             g2d.setFont(new Font("Calibri", Font.PLAIN, 20));
-            g2d.drawString(s,760,20);
+            g2d.drawString(s,685,20);
         }
     }
 
@@ -170,7 +177,7 @@ public class GamePanel extends JPanel implements MouseListener{
 
         g2d.setStroke(new BasicStroke(2f));
         for(Shape s : lines) {
-            g2d.setColor(Color.WHITE);
+            g2d.setColor(Color.black);
             g2d.draw(s);
         }
 

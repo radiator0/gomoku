@@ -40,7 +40,7 @@ public class LobbyPanel extends JPanel implements MouseListener {
     LobbyPanel(Frame frame, boolean isCreator){
         setPreferredSize(new Dimension(490,375));
         addMouseListener(this);
-        setBackground(new Color(123,123,132));
+        setBackground(new Color(82,81,93));
 
         this.frame = frame;
         this.isCreator = isCreator;
@@ -103,28 +103,22 @@ public class LobbyPanel extends JPanel implements MouseListener {
         }else{
             g2d.setColor(new Color(40,100,0));
         }
-        g2d.fillOval(372,90, 26,26);
+        g2d.fillOval(390,108, 26,26);
 
-        g2d.setColor(new Color(49,49,56));
-        g2d.drawOval(372,90, 26,26);
     }
 
     private void drawCanvas(){
-        g2d.setColor(new Color(82,81,93));
+        g2d.setColor(Color.black);
         g2d.fillRect(0,0,510,70);
         g2d.fillRect(0,310,510,70);
     }
 
     private void drawAvatars(){
         g2d.setColor(new Color(184,255,247));
-        g2d.fillOval(95,95, 105,105);
-        g2d.fillOval(297,95, 105,105);
+        g2d.fillOval(70,110, 105,105);
+        g2d.fillOval(317,110, 105,105);
 
         g2d.setColor(new Color(49,49,56));
-        g2d.setStroke(new BasicStroke(3));
-        g2d.drawOval(95,95, 105,105);
-        g2d.drawOval(297,95, 105,105);
-        g2d.setStroke(new BasicStroke(1));
     }
 
     private void drawNicknames(){
@@ -141,16 +135,16 @@ public class LobbyPanel extends JPanel implements MouseListener {
 
         g2d.setColor(Color.white);
         g2d.setFont(new Font("Calibri", Font.PLAIN, 20));
-        g2d.drawString(playerOne, 115,222);
-        g2d.drawString(playerTwo, 320,222);
+        g2d.drawString(playerOne, 85,242);
+        g2d.drawString(playerTwo, 340,242);
     }
 
     private void drawRounds(){
         if(isCreator) {
             g2d.setColor(new Color(45, 43, 61));
 
-            minusButton = new Ellipse2D.Double(210, 190, 24, 24);
-            plusButton = new Ellipse2D.Double(270, 190, 24, 24);
+            minusButton = new Ellipse2D.Double(205, 190, 24, 24);
+            plusButton = new Ellipse2D.Double(266, 190, 24, 24);
             g2d.fill(minusButton);
             g2d.fill(plusButton);
             g2d.draw(minusButton);
@@ -158,17 +152,17 @@ public class LobbyPanel extends JPanel implements MouseListener {
 
             g2d.setColor(Color.white);
 
-            g2d.drawString("-", 219, 207);
-            g2d.drawString("+", 278, 208);
+            g2d.drawString("-", 214, 207);
+            g2d.drawString("+", 273, 208);
         }
 
         g2d.setColor(Color.white);
 
         g2d.setFont(new Font("Calibri", Font.BOLD, 20));
-        g2d.drawString("Rounds", 220, 186);
+        g2d.drawString("Rounds", 217, 186);
 
         g2d.setFont(new Font("Calibri", Font.PLAIN, 20));
-        g2d.drawString(Integer.toString(rounds), 240, 208);
+        g2d.drawString(String.format("%2d",rounds), 235, 208);
 
 
 
@@ -181,24 +175,36 @@ public class LobbyPanel extends JPanel implements MouseListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        g2d.drawImage(image,174,237,null);
+
 
         g2d.setColor(new Color(82,81,93));
-        g2d.fillRect(195,241,125,30);
+        g2d.fillRect(170,251,145,40);
+
+        g2d.drawImage(image,174,252,null);
 
         g2d.setFont(new Font("Calibri", Font.PLAIN, 25));
         g2d.setColor(Color.white);
-        g2d.drawString(gameKey, 202,265);
+        g2d.drawString(gameKey, 202,280);
     }
 
     private void drawMainButtion(){
-        g2d.setColor(new Color(49,49,56));
-        g2d.setStroke(new BasicStroke(3));
+        if(isOpponentOnline){
+            g2d.setColor(new Color(175,4,72));
+        }else{
+            g2d.setColor(new Color( 76,2,31));
+        }
 
-        mainButton = new Rectangle2D.Double(150,290,210,40);
-        if(isCreator)g2d.draw(mainButton);
+        mainButton = new Rectangle2D.Double(140,310,210,40);
 
-        g2d.setStroke(new BasicStroke(1));
+        if(isCreator){
+            g2d.fill(mainButton);
+            g2d.draw(mainButton);
+            g2d.setFont(new Font("Calibri", Font.PLAIN, 35));
+            g2d.setColor(Color.white);
+            g2d.drawString("START", 202,340);
+        }
+
+
     }
 
     private void initGame(){

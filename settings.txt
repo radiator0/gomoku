@@ -1,0 +1,4 @@
+Nick:Krzychu
+Bot nick:Boteczek
+Default nick:Player
+Default rounds:7

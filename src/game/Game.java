@@ -24,7 +24,6 @@ public class Game {
         board = new Board(boardSize);
     }
 
-
     public Board getBoard(){
         return board;
     }
