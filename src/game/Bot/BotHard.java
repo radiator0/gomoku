@@ -280,7 +280,7 @@ public class BotHard implements Bot{
                 case 0: {
                     current = new Spot(enemy.getX(), enemy.getY() + 1);
                     current2 = new Spot(enemy.getX(), enemy.getY() + 2);
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -295,7 +295,7 @@ public class BotHard implements Bot{
                 case 1: {
                     current = new Spot(enemy.getX(), enemy.getY() - 1);
                     current2 = new Spot(enemy.getX(), enemy.getY() - 2);
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -310,7 +310,7 @@ public class BotHard implements Bot{
                 case 2: {
                     current = new Spot(enemy.getX() + 1, enemy.getY());
                     current2 = new Spot(enemy.getX() + 2, enemy.getY());
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -325,7 +325,7 @@ public class BotHard implements Bot{
                 case 3: {
                     current = new Spot(enemy.getX() - 1, enemy.getY());
                     current2 = new Spot(enemy.getX() - 2, enemy.getY());
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -340,7 +340,7 @@ public class BotHard implements Bot{
                 case 4: {
                     current = new Spot(enemy.getX() + 1, enemy.getY() + 1);
                     current2 = new Spot(enemy.getX() + 2, enemy.getY() + 2);
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -355,7 +355,7 @@ public class BotHard implements Bot{
                 case 5: {
                     current = new Spot(enemy.getX() - 1, enemy.getY() - 1);
                     current2 = new Spot(enemy.getX() - 2, enemy.getY() - 2);
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -370,7 +370,7 @@ public class BotHard implements Bot{
                 case 6: {
                     current = new Spot(enemy.getX() + 1, enemy.getY() - 1);
                     current2 = new Spot(enemy.getX() + 2, enemy.getY() - 2);
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
@@ -385,10 +385,150 @@ public class BotHard implements Bot{
                 case 7: {
                     current = new Spot(enemy.getX() - 1, enemy.getY() + 1);
                     current2 = new Spot(enemy.getX() - 2, enemy.getY() + 2);
-                    if (board.checkOut(current)) {
+                    if (board.checkOut(current) || board.checkOut(current2)) {
                         break;
                     }
                     if (board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX()+1,current.getY()-1,player);
+                        Spot temp = new Spot(current.getX() + 2, current.getY() - 2);
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        return null;
+    }
+
+    private Spot find0(Spot enemy, int fieldsNumber, Field sign) {
+        int size = board.getSize() - 1;
+        Spot current = null;
+        Spot current2 = null;
+        Spot current3 = null;
+        for (int i = 0; i < 8; i++) {
+            switch (i) {
+                case 0: {
+                    current = new Spot(enemy.getX(), enemy.getY() + 1);
+                    current2 = new Spot(enemy.getX(), enemy.getY() + 2);
+                    current3 = new Spot(enemy.getX(), enemy.getY()+3);
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX(),current.getY()-1,player);
+                        Spot temp = new Spot(current.getX(), current.getY() - 2);
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 1: {
+                    current = new Spot(enemy.getX(), enemy.getY() - 1);
+                    current2 = new Spot(enemy.getX(), enemy.getY() - 2);
+                    current3 = new Spot(enemy.getX(), enemy.getY() -3);
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX(),current.getY()+1,player);
+                        Spot temp = new Spot(current.getX(), current.getY() + 2);
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 2: {
+                    current = new Spot(enemy.getX() + 1, enemy.getY());
+                    current2 = new Spot(enemy.getX() + 2, enemy.getY());
+                    current3 = new Spot(enemy.getX() + 3, enemy.getY());
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX()-1,current.getY(),player);
+                        Spot temp = new Spot(current.getX() - 2, current.getY());
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 3: {
+                    current = new Spot(enemy.getX() - 1, enemy.getY());
+                    current2 = new Spot(enemy.getX() - 2, enemy.getY());
+                    current3 = new Spot(enemy.getX() - 3, enemy.getY());
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX()+1,current.getY()+1,player);
+                        Spot temp = new Spot(current.getX() + 2, current.getY());
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 4: {
+                    current = new Spot(enemy.getX() + 1, enemy.getY() + 1);
+                    current2 = new Spot(enemy.getX() + 2, enemy.getY() + 2);
+                    current3 = new Spot(enemy.getX() + 3, enemy.getY() + 3);
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX()-1,current.getY()-1,player);
+                        Spot temp = new Spot(current.getX() - 2, current.getY() - 2);
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 5: {
+                    current = new Spot(enemy.getX() - 1, enemy.getY() - 1);
+                    current2 = new Spot(enemy.getX() - 2, enemy.getY() - 2);
+                    current3 = new Spot(enemy.getX() - 3, enemy.getY() - 3);
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX()+1,current.getY()+1,player);
+                        Spot temp = new Spot(current.getX() + 2, current.getY() + 2);
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 6: {
+                    current = new Spot(enemy.getX() + 1, enemy.getY() - 1);
+                    current2 = new Spot(enemy.getX() + 2, enemy.getY() - 2);
+                    current3 = new Spot( enemy.getX() + 3, enemy.getY() - 3);
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
+                        //doMove(current.getX()-1,current.getY()+1,player);
+                        Spot temp = new Spot(current.getX() - 2, current.getY() + 2);
+                        if (!board.checkOut(temp)) {
+                            return temp;
+                        }
+                    }
+                }
+                break;
+                case 7: {
+                    current = new Spot(enemy.getX() - 1, enemy.getY() + 1);
+                    current2 = new Spot(enemy.getX() - 2, enemy.getY() + 2);
+                    current3 = new Spot(enemy.getX() - 3, enemy.getY() + 3);
+                    if (board.checkOut(current) || board.checkOut(current2) || board.checkOut(current3)) {
+                        break;
+                    }
+                    if (board.getBoard()[current3.getX()][current3.getY()] == sign && board.getBoard()[current2.getX()][current2.getY()] == sign && board.getBoard()[current.getX()][current.getY()] == sign && !board.checkOut(current)) {
                         //doMove(current.getX()+1,current.getY()-1,player);
                         Spot temp = new Spot(current.getX() + 2, current.getY() - 2);
                         if (!board.checkOut(temp)) {
@@ -414,34 +554,62 @@ public class BotHard implements Bot{
             player = 0;
         }
         if (canMove) {
-            Spot found = findA(enemy, fieldsNumber, wanted);
+            Spot found = find0(enemy, fieldsNumber, wanted);
             if (found != null) {
                 System.out.println("Wariant A:" + found.getX() + ":-" + found.getY());
                 if (doMove(found.getX(), found.getY(), player)) {
                     moveDone = true;
                 }
             } else {
-                found = findB(enemy, fieldsNumber, wanted);
+                found = findA(enemy, fieldsNumber, wanted);
                 if (found != null) {
                     System.out.println("Wariant B:" + found.getX() + ":-" + found.getY());
                     if (doMove(found.getX(), found.getY(), player)) {
                         moveDone = true;
                     }
                 } else {
-                    found = findC(enemy, fieldsNumber, wanted);
+                    found = findB(enemy, fieldsNumber, wanted);
                     if (found != null) {
-                        System.out.println("Wariant B:" + found.getX() + ":-" + found.getY());
+                        System.out.println("Wariant C:" + found.getX() + ":-" + found.getY());
                         if (doMove(found.getX(), found.getY(), player)) {
                             moveDone = true;
                         }
+                    }else {
+                        found = findC(enemy,fieldsNumber,wanted);
+                        if(found != null){
+                            System.out.println("Wariant D:" + found.getX() + ":-" + found.getY());
+                            if(doMove(found.getX(),found.getY(),player)){
+                                moveDone = true;
+                            }
+                        }
                     }
+
                 }
             }
-                while (!moveDone) {
+                int tryMove = 0;
+                while (tryMove<20) {
                     Spot currentSpot = enemy;
                     int i = (int) (Math.random() * 3);
                     int j = (int) (Math.random() * 3);
                     currentSpot = new Spot(enemy.getX() - (i - 1), enemy.getY() - (j - 1));
+                    if (!board.checkOut(currentSpot) && board.getBoard()[currentSpot.getX()][currentSpot.getY()] == null && !moveDone) {
+                        if (player == 1) {
+                            board.setO(currentSpot);
+                            System.out.println("Ustawiam O");
+                            moveDone = true;
+                        } else if (player == 0) {
+                            board.setX(currentSpot);
+                            System.out.println("Ustawiam X");
+                            moveDone = true;
+                        }
+                    }
+                    tryMove++;
+                }
+                if(!moveDone){
+                    Spot currentSpot = enemy;
+                    int i = (int)(Math.random()*board.getSize());
+                    int j = (int)(Math.random()*board.getSize());
+                    currentSpot = new Spot(i,j);
                     if (!board.checkOut(currentSpot) && board.getBoard()[currentSpot.getX()][currentSpot.getY()] == null && !moveDone) {
                         if (player == 1) {
                             board.setO(currentSpot);
