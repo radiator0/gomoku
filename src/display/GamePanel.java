@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.GlyphVector;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements MouseListener{
     private int fieldSize = 45;
     private List<Shape> lines;
     private Shape[][] shapes;
+    private Shape backButton;
     private Graphics2D g2d;
     private int boardSize = 15;
     private int winSize = 5;
@@ -33,8 +35,10 @@ public class GamePanel extends JPanel implements MouseListener{
     private Board board = game.getBoard();
     private Bot bot = null;
     private Online multi = null;
+    private Frame frame;
 
-    GamePanel(){
+    GamePanel(Frame frame){
+        this.frame = frame;
         lines = new ArrayList<>();
         setPreferredSize(new Dimension(boardSize*fieldSize+150,boardSize*fieldSize));
         System.out.println(boardSize*fieldSize+150);
@@ -42,13 +46,13 @@ public class GamePanel extends JPanel implements MouseListener{
         setBackground(Color.black);
     }
 
-    GamePanel(Online multi){
-        this();
+    GamePanel(Frame f, Online multi){
+        this(f);
         this.multi = multi;
     }
 
-    GamePanel(String botLevel){
-        this();
+    GamePanel(Frame f, String botLevel){
+        this(f);
         if(botLevel.equals("easy")){
             bot = new BotEasy(board);
         }else if(botLevel.equals("medium")){
@@ -148,6 +152,15 @@ public class GamePanel extends JPanel implements MouseListener{
 
     }
 
+    private void drawBackButton(){
+        g2d.setColor(Color.white);
+
+        GlyphVector vect = new Font("Calibri", Font.PLAIN, 37).createGlyphVector(g2d.getFontRenderContext(), "<<");
+        backButton = vect.getOutline(730, 30);
+        g2d.fill(backButton);
+        g2d.draw(backButton);
+    }
+
     private void drawWhoTurn(){
         if(multi != null){
             String s = "";
@@ -158,7 +171,7 @@ public class GamePanel extends JPanel implements MouseListener{
             }
             g2d.setColor(Color.white);
             g2d.setFont(new Font("Calibri", Font.PLAIN, 20));
-            g2d.drawString(s,685,20);
+            g2d.drawString(s,685,43);
         }
     }
 
@@ -189,6 +202,7 @@ public class GamePanel extends JPanel implements MouseListener{
         }
 
         drawRightPanel();
+        drawBackButton();
     }
 
 
@@ -222,6 +236,14 @@ public class GamePanel extends JPanel implements MouseListener{
     public void mouseClicked(MouseEvent e) {
 
 
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if(backButton.contains(e.getPoint())){
+            frame.backToStartpanel(this);
+        }
+
         for(int i=0; i<shapes.length; i++){
             for(int j=0; j<shapes[i].length; j++) {
                 if(shapes[i][j].contains(e.getPoint())){
@@ -247,11 +269,6 @@ public class GamePanel extends JPanel implements MouseListener{
                 }
             }
         }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
     }
 
     @Override

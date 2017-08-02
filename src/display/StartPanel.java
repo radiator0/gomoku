@@ -132,11 +132,22 @@ public class StartPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
         if(SwingUtilities.isLeftMouseButton(e)){
             System.out.println(e.getX()); // 298 348
 
             if(e.getY()>298 && e.getY()<348){
                 if(e.getX()>42 && e.getX()<251){
+
                     frame.createGame();
                 }else if(e.getX()>251 && e.getX()<460){
                     frame.joinGame();
@@ -151,16 +162,6 @@ public class StartPanel extends JPanel implements MouseListener {
                 }
             }
         }
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
 
     }
 

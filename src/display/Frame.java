@@ -32,6 +32,12 @@ public class Frame extends JFrame {
         setVisible(true);
     }
 
+    public void backToStartpanel(JPanel panel){
+        remove(panel);
+        add((startpanel = new StartPanel(this)));
+        pack();
+    }
+
     public void createGame(){
         remove(startpanel);
         lobbypanel  = new LobbyPanel(this,true);
@@ -57,17 +63,20 @@ public class Frame extends JFrame {
     }
 
     public void joinGame(){
-        remove(startpanel);
+        System.out.println("Wywolano joingame");
         lobbypanel  = new LobbyPanel(this,false);
-        add(lobbypanel);
-        pack();
+        if(lobbypanel.gameKey != null){
+            remove(startpanel);
+            add(lobbypanel);
+            pack();
 
-        startTimer(lobbypanel);
+            startTimer(lobbypanel);
+        }
     }
 
     public void startBot(String botLevel){
         remove(startpanel);
-        panel = new GamePanel(botLevel);
+        panel = new GamePanel(this,botLevel);
         add(panel);
         pack();
         this.setLocationRelativeTo(null);

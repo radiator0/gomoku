@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.GlyphVector;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -26,6 +27,7 @@ public class LobbyPanel extends JPanel implements MouseListener {
     private Shape minusButton;
     private Shape plusButton;
     private Shape mainButton;
+    private Shape backButton;
 
     private Online multi;
     private boolean isCreator;
@@ -35,7 +37,7 @@ public class LobbyPanel extends JPanel implements MouseListener {
 
     private String playerOne = Settings.DEFAULT_NICK;
     private String playerTwo = Settings.DEFAULT_NICK;
-    private String gameKey = "A4RT54Z";
+    public String gameKey = "A4RT54Z";
 
     LobbyPanel(Frame frame, boolean isCreator){
         setPreferredSize(new Dimension(490,375));
@@ -52,14 +54,18 @@ public class LobbyPanel extends JPanel implements MouseListener {
             multi.setRounds(rounds);
         }else{
             playerTwo = Settings.NICK;
-            multi = new Online(gameKey = getGameIdFromUser());
+            gameKey = getGameIdFromUser();
+            if(gameKey != null)
+                multi = new Online(gameKey);
         }
     }
+
 
     private String getGameIdFromUser(){
         String input = "";
         while(input.length()!=7){
             input = JOptionPane.showInputDialog(null ,"ENTER GAME ID:");
+            if(input == null) return null;
         }
         return input;
     }
@@ -83,6 +89,7 @@ public class LobbyPanel extends JPanel implements MouseListener {
         drawGameKey();
         drawMainButtion();
         if(!isCreator && multi.hasStarted()){  initGame(); }
+        drawBackButton();
     }
 
 
@@ -207,8 +214,17 @@ public class LobbyPanel extends JPanel implements MouseListener {
 
     }
 
+    private void drawBackButton(){
+        g2d.setColor(Color.white);
+
+        GlyphVector vect = new Font("Calibri", Font.PLAIN, 80).createGlyphVector(g2d.getFontRenderContext(), "<<");
+        backButton = vect.getOutline(40, 58);
+        g2d.fill(backButton);
+        g2d.draw(backButton);
+    }
+
     private void initGame(){
-        frame.panel = new GamePanel(multi);
+        frame.panel = new GamePanel(frame,multi);
         Game game = frame.panel.getGame();
         game.setMaxRound(rounds);
         game.setPlayerOne(playerOne);
@@ -220,6 +236,19 @@ public class LobbyPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if(backButton.contains(e.getPoint())){
+            frame.backToStartpanel(this);
+        }
         if(plusButton!= null && minusButton != null) {
             if (plusButton.contains(e.getPoint()) && rounds < 25) {
                 rounds++;
@@ -236,16 +265,6 @@ public class LobbyPanel extends JPanel implements MouseListener {
                 initGame();
             }
         }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
     }
 
     @Override
